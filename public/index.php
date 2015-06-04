@@ -1,32 +1,19 @@
 <?php
+/**
+ * @author  Marik Nazar
+ * @package api2cms
+ * @link    https://www.api2cms.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
-error_reporting(E_ALL);
-
-define('APP_PATH', realpath('..'));
+define('APPLICATION_PATH', dirname(dirname(__FILE__)) . '/application');
+define('PUBLIC_PATH', dirname(__FILE__));
+define('APPLICATION_ENV', getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production');
 
 try {
 
-    /**
-     * Read the configuration
-     */
-    $config = include APP_PATH . "/app/web/config/config.php";
-
-    /**
-     * Read auto-loader
-     */
-    include APP_PATH . "/app/web/config/loader.php";
-
-    /**
-     * Read services
-     */
-    include APP_PATH . "/app/web/config/services.php";
-
-    /**
-     * Handle the request
-     */
-    $application = new \Phalcon\Mvc\Application($di);
-
-    echo $application->handle()->getContent();
+    require_once APPLICATION_PATH . '/Bootstrap.php';
+    Bootstrap::run();
 
 } catch (\Exception $e) {
     echo $e->getMessage();
