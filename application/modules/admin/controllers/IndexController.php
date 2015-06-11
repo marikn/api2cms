@@ -8,10 +8,13 @@
 
 namespace API2CMS\Admin\Controllers;
 
+use API2CMS\Admin\Models\Users;
 use Phalcon\Mvc\Controller;
 
 class IndexController extends Controller
 {
     public function indexAction()
-    {}
+    {
+        $user = Users::find();
+    }
 }

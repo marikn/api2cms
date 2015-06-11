@@ -9,11 +9,12 @@
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Url                     as UrlResolver;
-use Phalcon\Db\Adapter\Pdo\Mysql        as DbAdapter;
+use Phalcon\Db\Adapter\Pdo\Postgresql   as DbAdapter;
 use Phalcon\Mvc\View\Engine\Volt        as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory   as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files       as SessionAdapter;
 use Phalcon\Logger\Adapter\File         as LogsAdapter;
+use Phalcon\Mvc\Application;
 
 class Bootstrap
 {
@@ -38,21 +39,6 @@ class Bootstrap
          */
         $di->setShared('view', function () use ($config) {
             $view = new View();
-
-            $view->registerEngines(array(
-                '.volt' => function ($view, $di) use ($config) {
-
-                    $volt = new VoltEngine($view, $di);
-
-                    $volt->setOptions(array(
-                        'compiledPath' => $config->application->cacheDir,
-                        'compiledSeparator' => '_'
-                    ));
-
-                    return $volt;
-                },
-                '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
-            ));
 
             return $view;
         });
@@ -92,7 +78,7 @@ class Bootstrap
             return require APPLICATION_PATH . '/config/routes.php';
         });
 
-        $application = new \Phalcon\Mvc\Application();
+        $application = new Application();
 
         $application->registerModules($config->modules->toArray());
         $application->setDI($di);

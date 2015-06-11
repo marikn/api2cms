@@ -8,15 +8,10 @@
 
 return new \Phalcon\Config(array(
     'db' => array(
-        'adapter'   => 'Mysql',
         'host'      => 'localhost',
-        'username'  => 'root',
-        'password'  => '',
+        'username'  => 'postgres',
+        'password'  => 'sk.cnhfn0h',
         'dbname'    => 'api2cms',
-        'options'   => array(
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-            PDO::ATTR_PERSISTENT => true
-        )
     ),
     'url' => array(
         'baseUri' => '/',

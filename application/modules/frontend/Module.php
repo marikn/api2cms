@@ -13,6 +13,7 @@ use Phalcon\DiInterface;
 use Phalcon\Loader;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\Engine\Volt        as VoltEngine;
 
 class Module implements ModuleDefinitionInterface
 {
@@ -29,6 +30,7 @@ class Module implements ModuleDefinitionInterface
             array(
                 'API2CMS\Frontend\Controllers' => APPLICATION_PATH . '/modules/frontend/controllers/',
                 'API2CMS\Frontend\Models'      => APPLICATION_PATH . '/modules/frontend/models/',
+                'API2CMS\Frontend\Forms'       => APPLICATION_PATH . '/modules/frontend/forms/',
             )
         );
 
@@ -51,7 +53,21 @@ class Module implements ModuleDefinitionInterface
 
         $di->set('view', function() {
             $view = new View();
-            $view->setViewsDir('../modules/frontend/views/');
+
+            $view->setViewsDir(APPLICATION_PATH . '/modules/frontend/views/');
+            $view->registerEngines(array(
+                '.volt' => function ($view, $di) {
+
+                    $volt = new VoltEngine($view, $di);
+
+                    $volt->setOptions(array(
+                        'compiledPath' => APPLICATION_PATH . '/cache/',
+                        'compiledSeparator' => '_'
+                    ));
+
+                    return $volt;
+                }
+            ));
 
             return $view;
         });

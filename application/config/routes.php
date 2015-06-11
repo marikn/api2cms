@@ -42,29 +42,43 @@ foreach ($config->get('modules') as $key => $module) {
 
             $router->mount($api);
             break;
-        default:
-            $router->add('/' . $key . '/:params', array(
+        case 'frontend':
+            $router->add('/:controller/:action', array(
+                'module' => $key,
+                'controller' => '1',
+                'action' => '2',
+//                'params' => 1
+            ))->setName($key);
+            $router->add('/', array(
                 'module' => $key,
                 'controller' => 'index',
                 'action' => 'index',
-                'params' => 1
+//                'params' => 1
             ))->setName($key);
-
-            $router->add('/' . $key . '/:controller/:params', array(
-                'module' => $key,
-                'controller' => 1,
-                'action' => 'index',
-                'params' => 2
-            ));
-
-            $router->add('/' . $key . '/:controller/:action/:params', array(
-                'module' => $key,
-                'controller' => 1,
-                'action' => 2,
-                'params' => 3
-            ));
-
             break;
+//        default:
+//            $router->add('/' . $key . '/:params', array(
+//                'module' => $key,
+//                'controller' => 'index',
+//                'action' => 'index',
+//                'params' => 1
+//            ))->setName($key);
+//
+//            $router->add('/' . $key . '/:controller/:params', array(
+//                'module' => $key,
+//                'controller' => 1,
+//                'action' => 'index',
+//                'params' => 2
+//            ));
+//
+//            $router->add('/' . $key . '/:controller/:action/:params', array(
+//                'module' => $key,
+//                'controller' => 1,
+//                'action' => 2,
+//                'params' => 3
+//            ));
+//
+//            break;
     }
 }
 
