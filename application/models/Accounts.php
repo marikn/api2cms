@@ -8,14 +8,16 @@
 
 namespace API2CMS\Models;
 
+use Phalcon\Db\Exception;
+use Phalcon\Di;
 use Phalcon\Mvc\Model;
 
 class Accounts extends Model
 {
     public $id;
     public $email;
-    public $first;
-    public $last;
+    public $firstName;
+    public $lastName;
     public $password;
     public $apiKey;
     public $role;
@@ -58,5 +60,10 @@ class Accounts extends Model
             'params'    => 'params',
             'disable'   => 'disable'
         ];
+    }
+
+    public static function findFirstByEmail($email)
+    {
+        return self::findFirst('email=\'' . $email . '\'');
     }
 }

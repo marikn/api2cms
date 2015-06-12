@@ -22,7 +22,6 @@ class LoginForm extends Form
 {
     public function initialize()
     {
-        // Email
         $email = new Text('email', array(
             'placeholder' => 'Email'
         ));
@@ -38,7 +37,6 @@ class LoginForm extends Form
 
         $this->add($email);
 
-        // Password
         $password = new Password('password', array(
             'placeholder' => 'Password'
         ));
@@ -49,7 +47,6 @@ class LoginForm extends Form
 
         $this->add($password);
 
-        // Remember
         $remember = new Check('remember', array(
             'value' => 'yes'
         ));
@@ -58,7 +55,6 @@ class LoginForm extends Form
 
         $this->add($remember);
 
-        // CSRF
         $csrf = new Hidden('csrf');
 
         $csrf->addValidator(new Identical(array(

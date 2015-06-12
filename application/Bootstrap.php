@@ -14,7 +14,9 @@ use Phalcon\Mvc\View\Engine\Volt        as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory   as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files       as SessionAdapter;
 use Phalcon\Logger\Adapter\File         as LogsAdapter;
+use Phalcon\Flash\Direct                as Flash;
 use Phalcon\Mvc\Application;
+use API2CMS\Auth\Auth;
 
 class Bootstrap
 {
@@ -22,7 +24,8 @@ class Bootstrap
     {
         $di = new FactoryDefault();
 
-        $config = include APPLICATION_PATH . '/config/config.php';
+        $config = include APPLICATION_PATH . '/configs/config.php';
+                  include APPLICATION_PATH . '/configs/loader.php';
         /**
          * The URL component is used to generate all kind of urls in the application
          */
@@ -71,11 +74,21 @@ class Bootstrap
             return new LogsAdapter(APPLICATION_PATH . '/logs/' . APPLICATION_ENV . '.log');
         });
 
-        /**
-         * Loading routes from the routes.php file
-         */
+        $di->set('auth', function () {
+            return new Auth();
+        });
+
         $di->set('router', function () use ($config) {
-            return require APPLICATION_PATH . '/config/routes.php';
+            return require APPLICATION_PATH . '/configs/routes.php';
+        });
+
+        $di->set('flash', function () {
+            return new Flash(array(
+                'error'     => 'alert alert-danger',
+                'success'   => 'alert alert-success',
+                'notice'    => 'alert alert-info',
+                'warning'   => 'alert alert-warning'
+            ));
         });
 
         $application = new Application();
