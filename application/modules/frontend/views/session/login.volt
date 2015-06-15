@@ -1,6 +1,6 @@
 {{ content() }}
 
-<div align="center" class="well">
+<div align="center" class="page container">
 
 	{{ form('class': 'form-search') }}
 

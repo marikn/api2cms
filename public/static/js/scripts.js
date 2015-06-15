@@ -127,10 +127,9 @@ var appMaster = {
         var num = 50; //number of pixels before modifying styles
 
         $(window).bind('scroll', function () {
-            if ($(window).scrollTop() > num) {
+            if ($(window).scrollTop() > num && window.location.pathname == '/') {
                 $('nav').addClass('scrolled');
-
-            } else {
+            } else if (window.location.pathname == '/') {
                 $('nav').removeClass('scrolled');
             }
         });

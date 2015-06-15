@@ -84,8 +84,8 @@ foreach ($config->get('modules') as $key => $module) {
 
 $router->notFound(array(
     'module'        => 'frontend',
-    'controller'    => 'index',
-    'action'        => '_404'
+    'controller'    => 'error',
+    'action'        => 'show404'
 ));
 
 return $router;

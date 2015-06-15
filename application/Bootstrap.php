@@ -16,6 +16,8 @@ use Phalcon\Session\Adapter\Files       as SessionAdapter;
 use Phalcon\Logger\Adapter\File         as LogsAdapter;
 use Phalcon\Flash\Direct                as Flash;
 use Phalcon\Mvc\Application;
+use Phalcon\Security;
+use Phalcon\Mvc\Dispatcher;
 use API2CMS\Auth\Auth;
 
 class Bootstrap
@@ -26,10 +28,8 @@ class Bootstrap
 
         $config = include APPLICATION_PATH . '/configs/config.php';
                   include APPLICATION_PATH . '/configs/loader.php';
-        /**
-         * The URL component is used to generate all kind of urls in the application
-         */
-        $di->set('url', function () use ($config) {
+
+        $di->set('url', function() use ($config) {
             $url = new UrlResolver();
             $url->setBaseUri        ($config->url->baseUri);
             $url->setStaticBaseUri  ($config->url->staticBaseUri);
@@ -37,33 +37,52 @@ class Bootstrap
             return $url;
         }, true);
 
-        /**
-         * Setting up the view component
-         */
-        $di->setShared('view', function () use ($config) {
+        $di->setShared('view', function() use ($config) {
             $view = new View();
 
             return $view;
         });
+//
+//        $di->set(
+//            'dispatcher',
+//            function() use ($di) {
+//
+//                $evManager = $di->getShared('eventsManager');
+//
+//                $evManager->attach(
+//                    "dispatch:beforeException",
+//                    function($event, $dispatcher, $exception)
+//                    {
+//                        switch ($exception->getCode()) {
+//                            case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+//                            case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
+//                                $dispatcher->forward(
+//                                    array(
+//                                        'module'     => 'frontend',
+//                                        'controller' => 'error',
+//                                        'action'     => 'show404',
+//                                    )
+//                                );
+//                                return false;
+//                        }
+//                    }
+//                );
+//                $dispatcher = new Dispatcher();
+//                $dispatcher->setEventsManager($evManager);
+//                return $dispatcher;
+//            },
+//            true
+//        );
 
-        /**
-         * Database connection is created based in the parameters defined in the configuration file
-         */
-        $di->set('db', function () use ($config) {
+        $di->set('db', function() use ($config) {
             return new DbAdapter($config->db->toArray());
         });
 
-        /**
-         * If the configuration specify the use of metadata adapter use it or use memory otherwise
-         */
-        $di->set('modelsMetadata', function () {
+        $di->set('modelsMetadata', function() {
             return new MetaDataAdapter();
         });
 
-        /**
-         * Start the session the first time some component request the session service
-         */
-        $di->setShared('session', function () {
+        $di->setShared('session', function() {
             $session = new SessionAdapter();
             $session->start();
 
@@ -74,15 +93,22 @@ class Bootstrap
             return new LogsAdapter(APPLICATION_PATH . '/logs/' . APPLICATION_ENV . '.log');
         });
 
-        $di->set('auth', function () {
+        $di->set('auth', function() {
             return new Auth();
         });
 
-        $di->set('router', function () use ($config) {
+        $di->set('security', function() {
+            $security = new Security();
+            $security->setWorkFactor(12);
+
+            return $security;
+        });
+
+        $di->set('router', function() use ($config) {
             return require APPLICATION_PATH . '/configs/routes.php';
         });
 
-        $di->set('flash', function () {
+        $di->set('flash', function() {
             return new Flash(array(
                 'error'     => 'alert alert-danger',
                 'success'   => 'alert alert-success',

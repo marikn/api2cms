@@ -33,8 +33,8 @@ class Auth extends Component
 
         $this->session->set('auth-identity', array(
             'id'        => $user->id,
-            'name'      => $user->name,
-            'profile'   => $user->profile->name
+            'name'      => $user->firstName,
+            'role'      => $user->role,
         ));
     }
 
@@ -46,7 +46,7 @@ class Auth extends Component
     public function getName()
     {
         $identity = $this->session->get('auth-identity');
-        return $identity['name'];
+        return $identity['first'];
     }
 
     public function remove()
