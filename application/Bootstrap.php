@@ -42,37 +42,6 @@ class Bootstrap
 
             return $view;
         });
-//
-//        $di->set(
-//            'dispatcher',
-//            function() use ($di) {
-//
-//                $evManager = $di->getShared('eventsManager');
-//
-//                $evManager->attach(
-//                    "dispatch:beforeException",
-//                    function($event, $dispatcher, $exception)
-//                    {
-//                        switch ($exception->getCode()) {
-//                            case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-//                            case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-//                                $dispatcher->forward(
-//                                    array(
-//                                        'module'     => 'frontend',
-//                                        'controller' => 'error',
-//                                        'action'     => 'show404',
-//                                    )
-//                                );
-//                                return false;
-//                        }
-//                    }
-//                );
-//                $dispatcher = new Dispatcher();
-//                $dispatcher->setEventsManager($evManager);
-//                return $dispatcher;
-//            },
-//            true
-//        );
 
         $di->set('db', function() use ($config) {
             return new DbAdapter($config->db->toArray());

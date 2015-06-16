@@ -1,4 +1,4 @@
-<div align="center" class="page container">
+<div align="center" class="landing-page container">
     <div class="page-header">
         <h1>Congratulations!</h1>
     </div>

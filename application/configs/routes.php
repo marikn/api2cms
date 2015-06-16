@@ -12,9 +12,9 @@ use Phalcon\Mvc\Router\Group as RouterGroup;
 $router = new Router(false);
 
 $router->add('/', array(
-    'module' => 'frontend',
+    'module'     => 'frontend',
     'controller' => 'index',
-    'action' => 'index'
+    'action'     => 'index'
 ))->setName('default');
 
 foreach ($config->get('modules') as $key => $module) {
@@ -27,65 +27,106 @@ foreach ($config->get('modules') as $key => $module) {
             );
 
             $api = new RouterGroup(array(
-                'module'     => 'api',
+                'module' => 'api',
             ));
 
             $api->setPrefix('/api/v1.0');
 
             $api->addGet('/{controller:(' . implode('|', $controllers) . ')}', array(
-                'action'     => 'list',
+                'action' => 'list',
             ));
 
             $api->addGet('/{controller:(' . implode('|', $controllers) . ')}/{id:\d+}', array(
-                'action'     => 'info',
+                'action' => 'info',
+            ));
+
+            $api->addGet('/{controller:(' . implode('|', $controllers) . ')}/count', array(
+                'action' => 'count',
+            ));
+
+            $api->addPost('/{controller:(' . implode('|', $controllers) . ')}', array(
+                'action' => 'create',
+            ));
+
+            $api->addPut('/{controller:(' . implode('|', $controllers) . ')}/{id:\d+}', array(
+                'action' => 'update',
+            ));
+
+            $api->addDelete('/{controller:(' . implode('|', $controllers) . ')}/{id:\d+}', array(
+                'action' => 'delete',
             ));
 
             $router->mount($api);
             break;
         case 'frontend':
-            $router->add('/:controller/:action', array(
-                'module' => $key,
-                'controller' => '1',
-                'action' => '2',
-//                'params' => 1
-            ))->setName($key);
             $router->add('/', array(
-                'module' => $key,
+                'module'     => $key,
+                'controller' => 'index',
+                'action'     => 'index',
+            ))->setName($key);
+
+            $router->add('/login', array(
+                'module'     => $key,
+                'controller' => 'session',
+                'action'     => 'login',
+            ))->setName($key);
+
+            $router->add('/signup', array(
+                'module'     => $key,
+                'controller' => 'session',
+                'action'     => 'signup',
+            ))->setName($key);
+
+            $router->add('/blog', array(
+                'module'     => $key,
+                'controller' => 'blog',
+                'action'     => 'list',
+            ))->setName($key);
+
+            $router->add('/blog/{id:\d+}', array(
+                'module'     => $key,
+                'controller' => 'blog',
+                'action'     => 'info',
+                'params'     => '1',
+            ))->setName($key);
+
+            $router->add('/contact-us', array(
+                'module'     => $key,
+                'controller' => 'contact',
+                'action'     => 'index',
+            ))->setName($key);
+
+            $router->add('/how-it-works', array(
+                'module'     => $key,
+                'controller' => 'index',
+                'action'     => 'how-it-works',
+            ))->setName($key);
+
+            break;
+        case 'admin':
+            $admin = new RouterGroup(array(
+                'module' => 'admin',
+            ));
+
+            $admin->setPrefix('/admin');
+
+            $admin->add('/', array(
                 'controller' => 'index',
                 'action' => 'index',
-//                'params' => 1
             ))->setName($key);
+
+            $router->mount($admin);
             break;
-//        default:
-//            $router->add('/' . $key . '/:params', array(
-//                'module' => $key,
-//                'controller' => 'index',
-//                'action' => 'index',
-//                'params' => 1
-//            ))->setName($key);
-//
-//            $router->add('/' . $key . '/:controller/:params', array(
-//                'module' => $key,
-//                'controller' => 1,
-//                'action' => 'index',
-//                'params' => 2
-//            ));
-//
-//            $router->add('/' . $key . '/:controller/:action/:params', array(
-//                'module' => $key,
-//                'controller' => 1,
-//                'action' => 2,
-//                'params' => 3
-//            ));
-//
-//            break;
+        default:
+            break;
     }
 }
 
 $router->notFound(array(
-    'module'        => 'frontend',
-    'controller'    => 'error',
-    'action'        => 'show404'
-));
+        'module'     => 'frontend',
+        'controller' => 'error',
+        'action'     => 'show404',
+    )
+);
 
 return $router;

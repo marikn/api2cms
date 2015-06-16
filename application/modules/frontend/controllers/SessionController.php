@@ -74,6 +74,8 @@ class SessionController extends Controller
 
                     return $this->response->redirect('users');
                 }
+            } else if ($this->auth->hasIdentity()) {
+                return $this->response->redirect('users');
             }
         } catch (\Exception $e) {
             $this->flash->error($e->getMessage());
@@ -89,6 +91,7 @@ class SessionController extends Controller
 
     public function logoutAction()
     {
-
+        $this->auth->remove();
+        $this->response->redirect('default');
     }
 }

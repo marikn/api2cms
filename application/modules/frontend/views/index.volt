@@ -37,9 +37,9 @@
 
         <div class="wrapper">
             {{ content() }}
-            {{ partial("partials/footer") }}
         </div>
 
+        {{ partial("partials/footer") }}
 
         {{ javascript_include("js/jquery-1.11.1.min.js") }}
         {{ javascript_include("js/bootstrap.min.js") }}
