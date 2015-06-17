@@ -23,7 +23,8 @@ class LoginForm extends Form
     public function initialize()
     {
         $email = new Text('email', array(
-            'placeholder' => 'Email'
+            'placeholder' => 'Email',
+            'class'       => 'form-control',
         ));
 
         $email->addValidators(array(
@@ -38,7 +39,8 @@ class LoginForm extends Form
         $this->add($email);
 
         $password = new Password('password', array(
-            'placeholder' => 'Password'
+            'placeholder' => 'Password',
+            'class'       => 'form-control',
         ));
 
         $password->addValidator(new PresenceOf(array(
@@ -47,25 +49,31 @@ class LoginForm extends Form
 
         $this->add($password);
 
-        $remember = new Check('remember', array(
-            'value' => 'yes'
-        ));
+//        $csrf = new Hidden('csrf');
+//
+//        $csrf->addValidator(new Identical(array(
+//            'value' => $this->security->getSessionToken(),
+//            'message' => 'CSRF validation failed'
+//        )));
+//
+//        $this->add($csrf);
 
-        $remember->setLabel('Remember me');
-
-        $this->add($remember);
-
-        $csrf = new Hidden('csrf');
-
-        $csrf->addValidator(new Identical(array(
-            'value' => $this->security->getSessionToken(),
-            'message' => 'CSRF validation failed'
+        $this->add(new Submit('Login', array(
+            'class' => 'btn btn-primary btn-lg'
         )));
+    }
 
-        $this->add($csrf);
-
-        $this->add(new Submit('go', array(
-            'class' => 'btn btn-success'
-        )));
+    /**
+     * Prints messages for a specific element
+     *
+     * @param $name
+     */
+    public function messages($name)
+    {
+        if ($this->hasMessagesFor($name)) {
+            foreach ($this->getMessagesFor($name) as $message) {
+                $this->flash->error($message);
+            }
+        }
     }
 }

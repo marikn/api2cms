@@ -24,8 +24,11 @@ class SignUpForm extends Form
 {
     public function initialize($entity = null, $options = null)
     {
-        $email = new Text('email');
-        $email->setLabel('E-Mail');
+        $email = new Text('email', array(
+            'placeholder' => 'Email',
+            'class'       => 'form-control',
+        ));
+
         $email->addValidators(array(
             new PresenceOf(array(
                 'message' => 'The e-mail is required'
@@ -37,8 +40,11 @@ class SignUpForm extends Form
 
         $this->add($email);
 
-        $first = new Text('first');
-        $first->setLabel('First name');
+        $first = new Text('first', array(
+            'placeholder' => 'First name',
+            'class'       => 'form-control',
+        ));
+
         $first->addValidators(array(
             new PresenceOf(array(
                 'message' => 'The first name is required'
@@ -47,8 +53,11 @@ class SignUpForm extends Form
 
         $this->add($first);
 
-        $last = new Text('last');
-        $last->setLabel('Last name');
+        $last = new Text('last', array(
+            'placeholder' => 'Last name',
+            'class'       => 'form-control',
+        ));
+
         $last->addValidators(array(
             new PresenceOf(array(
                 'message' => 'The last name is required'
@@ -57,8 +66,11 @@ class SignUpForm extends Form
 
         $this->add($last);
 
-        $password = new Password('password');
-        $password->setLabel('Password');
+        $password = new Password('password', array(
+            'placeholder' => 'Password',
+            'class'       => 'form-control',
+        ));
+
         $password->addValidators(array(
             new PresenceOf(array(
                 'message' => 'The password is required'
@@ -75,8 +87,11 @@ class SignUpForm extends Form
 
         $this->add($password);
 
-        $confirmPassword = new Password('confirmPassword');
-        $confirmPassword->setLabel('Confirm Password');
+        $confirmPassword = new Password('confirmPassword', array(
+            'placeholder' => 'Password',
+            'class'       => 'form-control',
+        ));
+
         $confirmPassword->addValidators(array(
             new PresenceOf(array(
                 'message' => 'The confirmation password is required'
@@ -86,26 +101,28 @@ class SignUpForm extends Form
         $this->add($confirmPassword);
 
         $terms = new Check('terms', array(
-            'value' => 'yes'
+            'value'       => 'yes',
         ));
+
         $terms->setLabel('Accept terms and conditions');
         $terms->addValidator(new Identical(array(
-            'value' => 'yes',
+            'value'   => 'yes',
             'message' => 'Terms and conditions must be accepted'
         )));
 
         $this->add($terms);
 
-        $csrf = new Hidden('csrf');
-        $csrf->addValidator(new Identical(array(
-            'value' => $this->security->getSessionToken(),
-            'message' => 'CSRF validation failed'
-        )));
-
-        $this->add($csrf);
+//        $csrf = new Hidden('csrf');
+//
+//        $csrf->addValidator(new Identical(array(
+//            'value' => $this->security->getSessionToken(),
+//            'message' => 'CSRF validation failed'
+//        )));
+//
+//        $this->add($csrf);
 
         $this->add(new Submit('Sign Up', array(
-            'class' => 'btn btn-success'
+            'class' => 'btn btn-primary btn-lg'
         )));
     }
 

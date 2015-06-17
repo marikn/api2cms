@@ -21,8 +21,11 @@ class SessionController extends Controller
 
         try {
             if ($this->request->isPost()) {
-                if ($form->isValid($this->request->getPost()) != false) {
-
+                if ($form->isValid($this->request->getPost()) == false) {
+                    foreach ($form->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
+                } else {
                     $account = new Accounts();
 
                     $account->assign(array(
@@ -38,7 +41,7 @@ class SessionController extends Controller
                     ));
 
                     if ($account->save()) {
-                        return $this->dispatcher->forward(array(
+                        $this->dispatcher->forward(array(
                             'module'        => 'frontend',
                             'controller'    => 'index',
                             'action'        => 'index'

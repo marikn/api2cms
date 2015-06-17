@@ -1,67 +1,58 @@
-{{ content() }}
+<div align="center" class="signup-page container">
 
-<div align="center" class="page container">
+    <div align="left">
+        <h2>Sign Up</h2>
+        <hr/>
+        {{ content() }}
+    </div>
 
-	{{ form('class': 'form-search') }}
+    {{ form('role': 'form', 'class': 'form-horizontal col-md-5 col-md-offset-3') }}
 
-		<div align="left">
-			<h2>Sign Up</h2>
-		</div>
+        <div align="right">
+            <div class="form-group">
+                <label for="email" class="col-sm-3 form-label">Email:</label>
+                <div class="col-sm-9">
+                    {{ form.render('email')}}
+                </div>
+            </div>
 
-		<table class="signup">
-			<tr>
-				<td align="right">{{ form.label('email') }}</td>
-				<td>
-					{{ form.render('email') }}
-					{{ form.messages('email') }}
-				</td>
-			</tr>
-            <tr>
-                <td align="right">{{ form.label('first') }}</td>
-            	<td>
-            	    {{ form.render('first') }}
-            		{{ form.messages('first') }}
-            	</td>
-            </tr>
-            <tr>
-                <td align="right">{{ form.label('last') }}</td>
-                <td>
+            <div class="form-group">
+                <label for="first" class="col-sm-3 form-label">First name:</label>
+                <div class="col-sm-9">
+                    {{ form.render('first') }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="first" class="col-sm-3 form-label">Last name:</label>
+                <div class="col-sm-9">
                     {{ form.render('last') }}
-                    {{ form.messages('last') }}
-                 </td>
-            </tr>
-			<tr>
-				<td align="right">{{ form.label('password') }}</td>
-				<td>
-					{{ form.render('password') }}
-					{{ form.messages('password') }}
-				</td>
-			</tr>
-			<tr>
-				<td align="right">{{ form.label('confirmPassword') }}</td>
-				<td>
-					{{ form.render('confirmPassword') }}
-					{{ form.messages('confirmPassword') }}
-				</td>
-			</tr>
-			<tr>
-				<td align="right"></td>
-				<td>
-					{{ form.render('terms') }} {{ form.label('terms') }}
-					{{ form.messages('terms') }}
-				</td>
-			</tr>
-			<tr>
-				<td align="right"></td>
-				<td>{{ form.render('Sign Up') }}</td>
-			</tr>
-		</table>
+                </div>
+            </div>
 
-		{{ form.render('csrf', ['value': security.getToken()]) }}
-		{{ form.messages('csrf') }}
+            <div class="form-group">
+                <label for="first" class="col-sm-3 form-label">Password:</label>
+                <div class="col-sm-9">
+                    {{ form.render('password') }}
+                </div>
+            </div>
 
-		<hr>
+            <div class="form-group">
+                <label for="first" class="col-sm-3 form-label">Confirm password:</label>
+                <div class="col-sm-9">
+                    {{ form.render('confirmPassword') }}
+                </div>
+            </div>
 
+            <div class="form-group">
+                <div class="col-sm-12">
+                    {{ form.render('terms') }} {{ form.label('terms') }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.render('Sign Up') }}
+            </div>
+        </div>
 	</form>
-
 </div>

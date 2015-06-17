@@ -1,4 +1,4 @@
-{% if router.getRewriteUri() == '/' %}
+<!--{% if router.getRewriteUri() == '/' %}-->
     <div class="pre-loader">
         <div class="load-con">
             {{ image("img/freeze/logo.png", "class" : "animated fadeInDown") }}
@@ -9,4 +9,4 @@
             </div>
         </div>
     </div>
-{% endif %}
+<!--{% endif %}-->

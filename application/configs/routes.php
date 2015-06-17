@@ -77,6 +77,12 @@ foreach ($config->get('modules') as $key => $module) {
                 'action'     => 'signup',
             ))->setName($key);
 
+            $router->add('/logout', array(
+                'module'     => $key,
+                'controller' => 'session',
+                'action'     => 'logout',
+            ))->setName($key);
+
             $router->add('/blog', array(
                 'module'     => $key,
                 'controller' => 'blog',
