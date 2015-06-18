@@ -31,7 +31,7 @@ class Auth extends Component
             throw new Exception('Wrong email/password combination');
         }
 
-        $this->session->set('auth-identity', array(
+        $this->session->set('identity', array(
             'id'        => $user->id,
             'name'      => $user->firstName,
             'role'      => $user->role,
@@ -40,23 +40,23 @@ class Auth extends Component
 
     public function getIdentity()
     {
-        return $this->session->get('auth-identity');
+        return $this->session->get('identity');
     }
 
     public function hasIdentity()
     {
-        return $this->session->has('auth-identity');
+        return $this->session->has('identity');
     }
 
     public function getName()
     {
-        $identity = $this->session->get('auth-identity');
+        $identity = $this->session->get('identity');
         return $identity['first'];
     }
 
     public function remove()
     {
-        $this->session->remove('auth-identity');
+        $this->session->remove('identity');
     }
 
     public function authUserById($id)
@@ -69,7 +69,7 @@ class Auth extends Component
 
         $this->checkAccountFlags($user);
 
-        $this->session->set('auth-identity', array(
+        $this->session->set('identity', array(
             'id'        => $user->id,
             'name'      => $user->name,
             'profile'   => $user->profile->name
@@ -78,7 +78,7 @@ class Auth extends Component
 
     public function getAccount()
     {
-        $identity = $this->session->get('auth-identity');
+        $identity = $this->session->get('identity');
 
         if (isset($identity['id'])) {
             $user = Accounts::findFirstById($identity['id']);

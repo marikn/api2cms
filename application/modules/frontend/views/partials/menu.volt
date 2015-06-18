@@ -11,30 +11,37 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <!--<li>-->
-                    <!--{{ link_to("#about", "about") }}-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--{{ link_to("#features", "features") }}-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--{{ link_to("#reviews", "reviews") }}-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--{{ link_to("#screens", "screens") }}-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--{{ link_to("#demo", "demo") }}-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--{{ link_to("#getApp", "get app", "class" : "getApp") }}-->
-                <!--</li>-->
                 <li>
-                    {{ link_to("/login", "login") }}
+                    {{ link_to("#about", "about") }}
                 </li>
                 <li>
-                    {{ link_to("/signup", "sign up") }}
+                    {{ link_to("#features", "features") }}
                 </li>
+                <li>
+                    {{ link_to("#reviews", "reviews") }}
+                </li>
+                <li>
+                    {{ link_to("#screens", "screens") }}
+                </li>
+                <li>
+                    {{ link_to("#demo", "demo") }}
+                </li>
+
+                {% if session.get('identity') == null %}
+                    <li>
+                        {{ link_to("/login", "login") }}
+                    </li>
+                    <li>
+                        {{ link_to("/signup", "sign up") }}
+                    </li>
+                {% else %}
+                    <li>
+                        {{ link_to("/profile", "profile") }}
+                    </li>
+                    <li>
+                        {{ link_to("/logout", "logout") }}
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

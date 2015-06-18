@@ -41,11 +41,13 @@ class SessionController extends Controller
                     ));
 
                     if ($account->save()) {
-                        $this->dispatcher->forward(array(
-                            'module'        => 'frontend',
-                            'controller'    => 'index',
-                            'action'        => 'index'
+                        $this->auth->check(array(
+                            'email'     => $this->request->getPost('email'),
+                            'password'  => $this->request->getPost('password'),
+                            'remember'  => $this->request->getPost('remember')
                         ));
+
+                        return $this->response->redirect('users');
                     }
 
                     $this->flash->error($account->getMessages());
@@ -95,6 +97,6 @@ class SessionController extends Controller
     public function logoutAction()
     {
         $this->auth->remove();
-        $this->response->redirect('default');
+        $this->response->redirect('/');
     }
 }
