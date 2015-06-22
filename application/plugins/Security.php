@@ -26,53 +26,84 @@ class Security extends Plugin
 
             $roles = $this->_defineRules();
 
-            $acl->addRole($roles['guest']);
-            $acl->addRole($roles['users'], $roles['guest']);
+            $acl->addRole($roles['guests']);
+            $acl->addRole($roles['users'], $roles['guests']);
             $acl->addRole($roles['admins'], $roles['users']);
-            $acl->addRole($roles['api']);
+            $acl->addRole($roles['apis']);
 
             $resources = $this->_defineResources();
 
-            foreach ($resources['private'] as $resource => $actions) {
-                $acl->addResource($resource, $actions);
+            foreach ($resources['private'] as $resource) {
+                $acl->addResource($resource['resource'], $resource['actions']);
 
-                foreach ($actions as $action) {
-                    $acl->allow('Administrators', $resource, $action);
+                foreach ($resource['actions'] as $action) {
+                    $acl->allow('admins', $resource['resource'], $action);
                 }
             }
 
-            foreach ($resources['protected'] as $resource => $actions) {
-                $acl->addResource($resource, $actions);
+            foreach ($resources['protected'] as $resource) {
+                $acl->addResource($resource['resource'], $resource['actions']);
 
-                foreach ($actions as $action) {
-                    $acl->allow('Users', $resource, $action);
+                foreach ($resource['actions'] as $action) {
+                    $acl->allow('users', $resource['resource'], $action);
                 }
             }
 
-            foreach ($resources['public'] as $resource => $actions) {
-                $acl->addResource($resource, $actions);
+            foreach ($resources['public'] as $resource) {
+                $acl->addResource($resource['resource'], $resource['actions']);
 
-                foreach ($actions as $action) {
-                    $acl->allow('Guests', $resource, $action);
+                foreach ($resource['actions'] as $action) {
+                    $acl->allow('guests', $resource['resource'], $action);
                 }
             }
+
+
+            $this->persistent->acl = $acl;
         }
 
         return $this->persistent->acl;
     }
 
     public function beforeDispatch(Event $event, Dispatcher $dispatcher)
-    {
+    {$this->session->destroy();
+        $identity = $this->session->get('identity');
 
+        $role = 'guests';
+
+        if (!$identity){
+            $role = 'guests';
+        } else if ($identity->role == 'user') {
+            $role = 'users';
+        } else if ($identity->role == 'admin') {
+            $role = 'admin';
+        }
+
+        $module     = $dispatcher->getModuleName();
+        $controller = $dispatcher->getControllerName();
+        $action     = $dispatcher->getActionName();
+
+        $acl = $this->getAcl();
+        $allowed = $acl->isAllowed($role, 'API2CMS\\' . ucfirst($module) . '\\' . ucfirst($controller), $action);
+
+        if ($allowed != Acl::ALLOW) {
+            $dispatcher->forward(array(
+                'module'     => 'frontend',
+                'controller' => 'error',
+                'action'     => 'show403'
+            ));
+
+            $this->session->destroy();
+            return false;
+        }
     }
 
     protected function _defineRules()
     {
         $roles = array(
-            'guests' => new Role('Guests'),
-            'users'  => new Role('Users'),
-            'admins' => new Role('Administrators'),
-            'api'    => new Role('API\'s'),
+            'guests' => new Role('guests'),
+            'users'  => new Role('users'),
+            'admins' => new Role('admins'),
+            'apis'   => new Role('apis'),
         );
 
         return $roles;
@@ -82,10 +113,15 @@ class Security extends Plugin
     {
         $resources = array();
 
-        $resources['private']   = array(new Resource('API2CMS\Admin\Index'), array('index', 'edit', 'add'));
-        $resources['protected'] = array(new Resource('API2CMS\Frontend\Cabinet'), array('list', 'info'));
-        $resources['public']    = array(new Resource('API2CMS\Frontend\Index'), array('index'));
-        $resources['api']       = array(new Resource('API2CMS\API\Articles'), array('list', 'info'));
+        $resources['private'][]   = array('resource' => new Resource('API2CMS\Admin\Index'), 'actions' => array('index', 'edit', 'add'));
+
+        $resources['protected'][] = array('resource' => new Resource('API2CMS\Frontend\Profile'), 'actions' => array('index', 'info'));
+
+        $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Index'), 'actions' => array('index'));
+        $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Session'), 'actions' => array('login', 'signup'));
+        $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Error'), 'actions' => array('show404', 'show403'));
+
+        $resources['api'][]       = array('resource' => new Resource('API2CMS\API\Articles'), 'actions' => array('list', 'info'));
 
         return $resources;
     }

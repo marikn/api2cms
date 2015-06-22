@@ -18,7 +18,9 @@ use Phalcon\Flash\Direct                as Flash;
 use Phalcon\Mvc\Application;
 use Phalcon\Security;
 use Phalcon\Mvc\Dispatcher;
+use Phalcon\Events\Manager;
 use API2CMS\Auth\Auth;
+use API2CMS\Plugins\Security            as Acl;
 
 class Bootstrap
 {
@@ -36,12 +38,6 @@ class Bootstrap
 
             return $url;
         }, true);
-
-        $di->setShared('view', function() use ($config) {
-            $view = new View();
-
-            return $view;
-        });
 
         $di->set('db', function() use ($config) {
             return new DbAdapter($config->db->toArray());
@@ -85,6 +81,19 @@ class Bootstrap
                 'warning'   => 'alert alert-warning'
             ));
         });
+
+        $di->set('dispatcher', function() use ($di) {
+
+            $eventsManager = new Manager();
+
+            $eventsManager->attach('dispatch:beforeDispatch', new Acl());
+
+            $dispatcher = new Dispatcher;
+            $dispatcher->setEventsManager($eventsManager);
+
+            return $dispatcher;
+        });
+
 
         $application = new Application();
 

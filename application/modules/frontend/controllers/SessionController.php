@@ -47,7 +47,7 @@ class SessionController extends Controller
                             'remember'  => $this->request->getPost('remember')
                         ));
 
-                        return $this->response->redirect('users');
+                        return $this->response->redirect('profile');
                     }
 
                     $this->flash->error($account->getMessages());
@@ -77,10 +77,10 @@ class SessionController extends Controller
                         'remember'  => $this->request->getPost('remember')
                     ));
 
-                    return $this->response->redirect('users');
+                    return $this->response->redirect('profile');
                 }
             } else if ($this->auth->hasIdentity()) {
-                return $this->response->redirect('users');
+                return $this->response->redirect('profile');
             }
         } catch (\Exception $e) {
             $this->flash->error($e->getMessage());

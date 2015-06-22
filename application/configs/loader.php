@@ -13,6 +13,7 @@ $loader = new \Phalcon\Loader();
  */
 $loader->registerNamespaces(array(
     'API2CMS\Models'    => APPLICATION_PATH . '/models/',
+    'API2CMS\Plugins'   => APPLICATION_PATH . '/plugins/',
     'API2CMS'           => APPLICATION_PATH . '/libraries/',
 ));
 

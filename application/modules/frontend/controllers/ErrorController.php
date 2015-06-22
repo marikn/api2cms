@@ -15,6 +15,12 @@ class ErrorController extends Controller
     public function show404Action()
     {
         $this->response->setStatusCode(404, 'Page not found');
-        $this->view->pick('404/404');
+        $this->view->pick('error/404');
+    }
+
+    public function show403Action()
+    {
+        $this->response->setStatusCode(403, 'You don\'t have permissions to view this page' );
+        $this->view->pick('error/403');
     }
 }
