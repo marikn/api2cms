@@ -13,15 +13,15 @@ use Phalcon\Mvc\Model;
 
 class Accounts extends Model
 {
-    public $id;
-    public $email;
-    public $firstName;
-    public $lastName;
-    public $password;
-    public $apiKey;
-    public $role;
-    public $params;
-    public $disable;
+    protected $id;
+    protected $email;
+    protected $firstName;
+    protected $lastName;
+    protected $password;
+    protected $apiKey;
+    protected $role;
+    protected $params;
+    protected $disable;
 
     public function __get($name)
     {

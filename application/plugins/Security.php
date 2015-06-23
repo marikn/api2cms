@@ -57,7 +57,6 @@ class Security extends Plugin
                 }
             }
 
-
             $this->persistent->acl = $acl;
         }
 
@@ -65,16 +64,16 @@ class Security extends Plugin
     }
 
     public function beforeDispatch(Event $event, Dispatcher $dispatcher)
-    {$this->session->destroy();
+    {
         $identity = $this->session->get('identity');
 
         $role = 'guests';
 
         if (!$identity){
             $role = 'guests';
-        } else if ($identity->role == 'user') {
+        } else if ($identity['role'] == 'user') {
             $role = 'users';
-        } else if ($identity->role == 'admin') {
+        } else if ($identity['role'] == 'admin') {
             $role = 'admin';
         }
 
@@ -92,7 +91,6 @@ class Security extends Plugin
                 'action'     => 'show403'
             ));
 
-            $this->session->destroy();
             return false;
         }
     }
@@ -115,11 +113,12 @@ class Security extends Plugin
 
         $resources['private'][]   = array('resource' => new Resource('API2CMS\Admin\Index'), 'actions' => array('index', 'edit', 'add'));
 
-        $resources['protected'][] = array('resource' => new Resource('API2CMS\Frontend\Profile'), 'actions' => array('index', 'info'));
+        $resources['protected'][] = array('resource' => new Resource('API2CMS\Frontend\Profile'), 'actions' => array('index', 'test'));
 
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Index'), 'actions' => array('index'));
-        $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Session'), 'actions' => array('login', 'signup'));
+        $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Session'), 'actions' => array('login', 'signup', 'logout'));
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Error'), 'actions' => array('show404', 'show403'));
+        $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Blog'), 'actions' => array('index'));
 
         $resources['api'][]       = array('resource' => new Resource('API2CMS\API\Articles'), 'actions' => array('list', 'info'));
 

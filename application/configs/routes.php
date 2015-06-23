@@ -86,7 +86,7 @@ foreach ($config->get('modules') as $key => $module) {
             $router->add('/blog', array(
                 'module'     => $key,
                 'controller' => 'blog',
-                'action'     => 'list',
+                'action'     => 'index',
             ))->setName($key);
 
             $router->add('/blog/{id:\d+}', array(
@@ -106,6 +106,18 @@ foreach ($config->get('modules') as $key => $module) {
                 'module'     => $key,
                 'controller' => 'index',
                 'action'     => 'how-it-works',
+            ))->setName($key);
+
+            $router->add('/profile', array(
+                'module'     => $key,
+                'controller' => 'profile',
+                'action'     => 'index',
+            ))->setName($key);
+
+            $router->add('/profile/:action', array(
+                'module'     => $key,
+                'controller' => 'profile',
+                'action'     => 1,
             ))->setName($key);
 
             break;
