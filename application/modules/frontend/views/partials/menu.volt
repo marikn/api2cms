@@ -12,19 +12,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    {{ link_to("#about", "about") }}
-                </li>
-                <li>
-                    {{ link_to("#features", "features") }}
-                </li>
-                <li>
-                    {{ link_to("#reviews", "reviews") }}
-                </li>
-                <li>
-                    {{ link_to("#screens", "screens") }}
-                </li>
-                <li>
-                    {{ link_to("#demo", "demo") }}
+                    {{ link_to("blog", "blog") }}
                 </li>
 
                 {% if session.get('identity') == null %}
