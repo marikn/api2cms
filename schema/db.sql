@@ -12,7 +12,7 @@ CREATE TABLE accounts (
   PRIMARY KEY (id)
 );
 
-INSERT INTO accounts (email, first, last, password, api_key, role, params, disable) VALUES ('admin@mail.com', 'Admin', 'Adminko', '$2a$12$X6tg2xwDQt9ylBOiorbyd.RF1.SLKtLrtm1SF8uCjnazb5SR9svK.', '2e52721943e85c9c51fc10a7bc57f5b9', 'admin', '', 'N');
+INSERT INTO accounts (email, first, last, password, api_key, role, params, disable) VALUES ('admin@mail.com', 'Admin', 'Adminko', '$2a$12$X6tg2xwDQt9ylBOiorbyd.RF1.SLKtLrtm1SF8uCjnazb5SR9svK.', '2e52721943e85c9c51fc10a7bc57f5b9', 'admins', '', 'N');
 
 DROP TABLE IF EXISTS articles;
 CREATE TABLE articles (
