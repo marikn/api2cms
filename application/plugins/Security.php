@@ -26,10 +26,10 @@ class Security extends Plugin
 
             $roles = $this->_defineRules();
 
-            $acl->addRole($roles['guests']);
-            $acl->addRole($roles['users'], $roles['guests']);
-            $acl->addRole($roles['admins'], $roles['users']);
-            $acl->addRole($roles['apis']);
+            $acl->addRole($roles['guest']);
+            $acl->addRole($roles['user'], $roles['guest']);
+            $acl->addRole($roles['admin'], $roles['user']);
+            $acl->addRole($roles['api']);
 
             $resources = $this->_defineResources();
 
@@ -37,7 +37,7 @@ class Security extends Plugin
                 $acl->addResource($resource['resource'], $resource['actions']);
 
                 foreach ($resource['actions'] as $action) {
-                    $acl->allow('admins', $resource['resource'], $action);
+                    $acl->allow('admin', $resource['resource'], $action);
                 }
             }
 
@@ -45,7 +45,7 @@ class Security extends Plugin
                 $acl->addResource($resource['resource'], $resource['actions']);
 
                 foreach ($resource['actions'] as $action) {
-                    $acl->allow('users', $resource['resource'], $action);
+                    $acl->allow('user', $resource['resource'], $action);
                 }
             }
 
@@ -53,7 +53,7 @@ class Security extends Plugin
                 $acl->addResource($resource['resource'], $resource['actions']);
 
                 foreach ($resource['actions'] as $action) {
-                    $acl->allow('guests', $resource['resource'], $action);
+                    $acl->allow('guest', $resource['resource'], $action);
                 }
             }
 
@@ -67,12 +67,12 @@ class Security extends Plugin
     {
         $identity = $this->session->get('identity');
 
-        $role = 'guests';
+        $role = 'guest';
 
         if (!$identity){
-            $role = 'guests';
+            $role = 'guest';
         } else if ($identity['role'] == 'user') {
-            $role = 'users';
+            $role = 'user';
         } else if ($identity['role'] == 'admin') {
             $role = 'admin';
         }
@@ -98,10 +98,10 @@ class Security extends Plugin
     protected function _defineRules()
     {
         $roles = array(
-            'guests' => new Role('guests'),
-            'users'  => new Role('users'),
-            'admins' => new Role('admins'),
-            'apis'   => new Role('apis'),
+            'guest' => new Role('guest'),
+            'user'  => new Role('user'),
+            'admin' => new Role('admin'),
+            'api'   => new Role('api'),
         );
 
         return $roles;
