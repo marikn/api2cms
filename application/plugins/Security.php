@@ -118,7 +118,7 @@ class Security extends Plugin
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Index'), 'actions' => array('index'));
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Session'), 'actions' => array('login', 'signup', 'logout'));
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Error'), 'actions' => array('show404', 'show403'));
-        $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Blog'), 'actions' => array('index'));
+        $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Blog'), 'actions' => array('index', 'info'));
 
         $resources['api'][]       = array('resource' => new Resource('API2CMS\API\Articles'), 'actions' => array('list', 'info'));
 

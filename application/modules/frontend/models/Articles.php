@@ -16,4 +16,11 @@ class Articles extends \API2CMS\Models\Articles
 
         return $articles;
     }
+
+    public static function getBlogArticleById($id)
+    {
+        $article = self::findFirst('id=\'' . $id . '\'');
+
+        return $article;
+    }
 }

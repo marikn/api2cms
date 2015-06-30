@@ -89,11 +89,11 @@ foreach ($config->get('modules') as $key => $module) {
                 'action'     => 'index',
             ))->setName($key);
 
-            $router->add('/blog/{id:\d+}', array(
+            $router->add('/blog/{int:\d+}', array(
                 'module'     => $key,
                 'controller' => 'blog',
                 'action'     => 'info',
-                'params'     => '1',
+                'articleId'  => '1',
             ))->setName($key);
 
             $router->add('/contact-us', array(

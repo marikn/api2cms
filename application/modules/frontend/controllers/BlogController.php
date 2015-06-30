@@ -32,4 +32,13 @@ class BlogController extends Controller
 
         $this->view->page = $page;
     }
+
+    public function infoAction()
+    {
+        $articleId = $this->dispatcher->getParam("articleId");
+
+        $article = Articles::getBlogArticleById($articleId);
+
+        $this->view->article = $article;
+    }
 }
