@@ -1149,3 +1149,26 @@ footer {
 .content {
     padding: 0px 10px 270px 10px;
 }
+
+.profile-menu {
+    float: left;
+    width: 250px;
+    text-align: left;
+    border-right: 1px solid #CCCCCC;
+}
+
+#profile-menu {
+    list-style: none;
+}
+
+#profile-menu li {
+    margin: 10px 0;
+}
+
+#api-key {
+ margin: 10px;
+}
+
+a.active {
+    text-decoration: underline;
+}

@@ -113,7 +113,7 @@ class Security extends Plugin
 
         $resources['private'][]   = array('resource' => new Resource('API2CMS\Admin\Index'), 'actions' => array('index', 'edit', 'add'));
 
-        $resources['protected'][] = array('resource' => new Resource('API2CMS\Frontend\Profile'), 'actions' => array('index', 'test'));
+        $resources['protected'][] = array('resource' => new Resource('API2CMS\Frontend\Profile'), 'actions' => array('index', 'edit', 'sites', 'logs', 'settings'));
 
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Index'), 'actions' => array('index'));
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Session'), 'actions' => array('login', 'signup', 'logout'));
