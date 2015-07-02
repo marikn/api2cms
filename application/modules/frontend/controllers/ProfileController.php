@@ -14,12 +14,18 @@ use Phalcon\Mvc\Controller;
 
 class ProfileController extends Controller
 {
+    /**
+     * @var Accounts
+     */
+    protected $_account = null;
+
     public function initialize()
     {
         $identity = $this->auth->getIdentity();
 
-        $account = Accounts::findFirstById($identity['id']);
-        $this->view->account = $account;
+        $this->_account = Accounts::findFirstById($identity['id']);
+
+        $this->view->account = $this->_account;
     }
 
     public function indexAction()
@@ -31,6 +37,16 @@ class ProfileController extends Controller
     {
         $form = new EditInfoForm();
 
+        if (!is_null($this->_account)) {
+            $default = array(
+                'email' => $this->_account->email,
+                'first' => $this->_account->firstName,
+                'last'  => $this->_account->lastName,
+            );
+
+            $form->setDefaults($default);
+        }
+
         try {
             if ($this->request->isPost()) {
                 if ($form->isValid($this->request->getPost()) == false) {
@@ -38,28 +54,22 @@ class ProfileController extends Controller
                         $this->flash->error($message);
                     }
                 } else {
-                    $account = new Accounts();
-
-                    $account->assign(array(
-                        'email'         => $this->request->getPost('email'),
-                        'firstName'     => $this->request->getPost('first', 'striptags'),
-                        'lastName'      => $this->request->getPost('last', 'striptags'),
-                        'password'      => $this->security->hash($this->request->getPost('password')),
-                        'apiKey'        => md5(uniqid('', true)),
-                        'role'          => 'user',
-                        'params'        => null,
-                        'disable'       => 'N',
-
+                    $account = Accounts::findFirst(array(
+                        'id = :id:',
+                        'bind' => array('id' => $this->_account->id)
                     ));
 
-                    if ($account->save()) {
-                        $this->auth->check(array(
-                            'email'     => $this->request->getPost('email'),
-                            'password'  => $this->request->getPost('password'),
-                            'remember'  => $this->request->getPost('remember')
-                        ));
+                    if (!$account) {
+                        $this->flash->error("The account was not found");
+                    }
 
-                        return $this->response->redirect('profile');
+                    $account->id        = $this->_account->id;
+                    $account->email     = $this->request->getPost('email');
+                    $account->firstName = $this->request->getPost('first', 'striptags');
+                    $account->lastName  = $this->request->getPost('last', 'striptags');
+
+                    if ($account->save()) {
+                        return $this->response->redirect('profile/edit');
                     }
 
                     $this->flash->error($account->getMessages());

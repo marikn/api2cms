@@ -14,7 +14,6 @@
     {{ partial("partials/profile-menu") }}
 
     {{ form('role': 'form', 'class': 'form-horizontal col-md-5 col-md-offset-3') }}
-
             <div align="right">
                 <div class="form-group">
                     <label for="email" class="col-sm-3 form-label">Email:</label>
@@ -41,6 +40,5 @@
                     {{ form.render('Save') }}
                 </div>
             </div>
-    	</form>
-
+    </form>
 </div>

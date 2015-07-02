@@ -12,5 +12,6 @@
     </div>
 
     {{ partial("partials/profile-menu") }}
+    Here will be pretty graphics, wich included a lot of helpful information.
 
 </div>

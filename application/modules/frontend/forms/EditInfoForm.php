@@ -8,14 +8,11 @@
 
 namespace API2CMS\Frontend\Forms;
 
-use Phalcon\Forms\Element\Password;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
-use Phalcon\Mvc\Model\Validator\Email;
-use Phalcon\Validation\Validator\Confirmation;
+use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\PresenceOf;
-use Phalcon\Validation\Validator\StringLength;
 
 class EditInfoForm extends Form
 {
@@ -66,5 +63,23 @@ class EditInfoForm extends Form
         $this->add(new Submit('Save', array(
             'class' => 'btn btn-primary btn-lg'
         )));
+    }
+
+    public function setDefaults($values = array()) {
+
+        if (!count($values)) {
+            return;
+        }
+
+        $elements = $this->getElements();
+
+        foreach ($elements as $i => $element) {
+
+            $name = $element->getName();
+
+            if (isset($values[$name])) {
+                $element->setDefault($values[$name]);
+            }
+        }
     }
 }
