@@ -49,7 +49,7 @@ class Articles extends Model
 
     public function columnMap()
     {
-        return [
+        return array(
             'id'                => 'id',
             'title'             => 'title',
             'content'           => 'content',
@@ -61,7 +61,7 @@ class Articles extends Model
             'cover'             => 'cover',
             'blog'              => 'blog',
             'disable'           => 'disable'
-        ];
+        );
     }
 
     public static function findByKey($key, $value)
