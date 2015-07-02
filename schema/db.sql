@@ -31,11 +31,41 @@ CREATE TABLE articles (
 );
 
 INSERT INTO articles (title, content, meta_title, meta_description, meta_keywords, author, date_created, cover, blog, disable) VALUES ('This is simple blog article', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum turpis lorem, porta vitae justo et, maximus sagittis felis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Ut bibendum lacus eu egestas faucibus. Proin lacus lectus, hendrerit sed faucibus ut, viverra quis sem. Praesent sagittis porttitor suscipit. Mauris enim eros, vehicula sed massa sit amet, convallis ultricies turpis. Mauris euismod neque et odio hendrerit efficitur. Morbi et accumsan lacus. Proin dolor enim, congue at nisl et, blandit sollicitudin sem. Fusce condimentum venenatis rutrum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum gravida purus a eleifend maximus. Phasellus rutrum, justo a finibus rhoncus, nibh massa aliquam arcu, non aliquet lacus nulla eget lacus. Nulla pharetra vel augue eget tincidunt. Etiam ultrices tempor lobortis.
-
 Sed erat risus, interdum ac pellentesque id, convallis ac tortor. Aenean imperdiet turpis nec porttitor laoreet. Maecenas blandit consequat ex, eget facilisis nibh rutrum ac. Aenean at dui condimentum, lacinia purus vitae, egestas mauris. Donec at volutpat neque. Phasellus suscipit tincidunt ipsum, quis commodo lacus dictum et. Integer cursus tincidunt dictum. Sed aliquam placerat dui id bibendum. Cras quis lorem sit amet quam venenatis consectetur quis vel nisl. Fusce semper arcu est, ut sollicitudin est commodo ut. Morbi tellus sapien, tempus sed faucibus eget, posuere quis enim. Vivamus euismod nisl dapibus, ultricies risus a, blandit libero. Nulla sed commodo dolor.
-
 Aenean faucibus vulputate leo, ac vulputate odio placerat sit amet. In suscipit, massa ac sodales imperdiet, sapien libero maximus est, quis fringilla leo diam ut nisi. Nunc gravida diam vel ex pulvinar tincidunt. Nulla enim est, tincidunt et lectus vitae, tempor venenatis ipsum. Fusce sed lectus sit amet erat aliquam pulvinar quis ac enim. Praesent at ultricies est, eget dictum dolor. Nunc aliquam metus vel diam mollis, quis malesuada mauris viverra. In feugiat non lorem eleifend vulputate. Nullam vulputate, sapien ut ultrices posuere, felis elit imperdiet elit, id congue nibh nunc quis dui. Curabitur porttitor tortor bibendum, ultrices libero consequat, viverra nibh. Integer bibendum maximus tincidunt. Phasellus mattis eros sodales tortor consequat maximus. Pellentesque molestie varius sem, sed imperdiet nulla facilisis eu. Aenean pulvinar magna vitae mi hendrerit sodales. Proin dignissim quis mauris eu efficitur. Sed leo metus, condimentum et blandit sed, posuere a ex.
-
 Donec nec magna sem. Sed et felis diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque ut accumsan justo, et sollicitudin nulla. Proin maximus orci orci, at consequat ipsum cursus a. Sed vel sapien arcu. Curabitur tristique dignissim scelerisque. Phasellus nec fringilla lectus. Sed posuere eget ante non eleifend. Sed suscipit libero id erat eleifend tincidunt. Suspendisse pharetra sollicitudin diam, pretium tempor quam. Vestibulum ut vulputate magna, nec cursus nibh. Aenean sodales massa ut quam iaculis iaculis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In eleifend turpis at cursus ultrices.
-
 Donec id euismod lorem, a bibendum eros. Vestibulum consequat pulvinar porta. Nullam convallis quam sit amet efficitur aliquet. Proin sed finibus massa. Phasellus diam turpis, eleifend at dolor sit amet, sodales hendrerit dui. Nam ut imperdiet lacus. Curabitur aliquam enim sapien, vitae viverra arcu cursus sed. Vestibulum vehicula auctor felis nec vehicula. Aenean a eros vel augue maximus facilisis. Suspendisse porta pretium erat, vel sodales ante eleifend quis. Pellentesque commodo vulputate quam, gravida accumsan lorem hendrerit at. Suspendisse viverra, ipsum et hendrerit interdum, ante leo efficitur odio, quis maximus lacus risus non eros. Maecenas pharetra arcu diam. Aenean viverra mauris ipsum.', '', '', '', 1, '', '', 'Y', 'N');
+
+DROP TABLE IF EXISTS cms_types;
+CREATE TABLE cms_types (
+  id SERIAL,
+  code varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
+  description text DEFAULT NULL,
+  supported_versions varchar(255),
+  PRIMARY KEY (id)
+);
+
+INSERT INTO cms_types (code, name, description, supported_versions) VALUES ('wordpess', 'Wordpress', 'Most popular CMS last years', '1.1 - 4.2');
+
+DROP TABLE IF EXISTS sites;
+CREATE TABLE sites (
+  id SERIAL,
+  account_id int,
+  site_url varchar(255) NOT NULL,
+  site_key varchar(32) NOT NULL,
+  cms_type varchar(255) NOT NULL,
+  params text DEFAULT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO sites (account_id, site_url, site_key, cms_type, params) VALUES (1, 'http://wordpress.dev', '73fabd830e8e2984ed351e4cefa5f6a7', 1, '');
+
+DROP TABLE IF EXISTS settings;
+CREATE TABLE settings (
+  key varchar(255) NOT NULL,
+  value VARCHAR (255) NOT NULL,
+  PRIMARY KEY (key)
+);
+
+INSERT INTO settings (key, value) VALUES ('service_version', 1.0);
