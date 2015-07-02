@@ -82,6 +82,14 @@ class Security extends Plugin
         $action     = $dispatcher->getActionName();
 
         $acl = $this->getAcl();
+
+        if ($module == 'api') {
+            $apiKey     = $this->request->getHeader('HTTP_X_API_KEY');
+            $siteKey    = $this->request->getHeader('HTTP_X_SITE_KEY');
+
+            $this->auth->apiCheck();
+        }
+
         $allowed = $acl->isAllowed($role, 'API2CMS\\' . ucfirst($module) . '\\' . ucfirst($controller), $action);
 
         if ($allowed != Acl::ALLOW) {
@@ -113,7 +121,7 @@ class Security extends Plugin
 
         $resources['private'][]   = array('resource' => new Resource('API2CMS\Admin\Index'), 'actions' => array('index', 'edit', 'add'));
 
-        $resources['protected'][] = array('resource' => new Resource('API2CMS\Frontend\Profile'), 'actions' => array('index', 'test'));
+        $resources['protected'][] = array('resource' => new Resource('API2CMS\Frontend\Profile'), 'actions' => array('index', 'edit', 'sites', 'logs', 'settings'));
 
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Index'), 'actions' => array('index'));
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Session'), 'actions' => array('login', 'signup', 'logout'));

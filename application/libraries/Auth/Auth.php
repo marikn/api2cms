@@ -38,6 +38,11 @@ class Auth extends Component
         ));
     }
 
+    public function apiCheck()
+    {
+
+    }
+
     public function getIdentity()
     {
         return $this->session->get('identity');

@@ -12,6 +12,6 @@
     </div>
 
     {{ partial("partials/profile-menu") }}
-    Here will be pretty graphics, wich included a lot of helpful information.
+    Here will be pretty grid with list of sites, wich connect to your account.
 
 </div>

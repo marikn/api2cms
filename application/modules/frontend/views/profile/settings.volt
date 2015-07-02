@@ -12,6 +12,6 @@
     </div>
 
     {{ partial("partials/profile-menu") }}
-    Here will be pretty graphics, wich included a lot of helpful information.
+    Here you can configure some parameters of your account.
 
 </div>
