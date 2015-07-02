@@ -82,6 +82,14 @@ class Security extends Plugin
         $action     = $dispatcher->getActionName();
 
         $acl = $this->getAcl();
+
+        if ($module == 'api') {
+            $apiKey     = $this->request->getHeader('HTTP_X_API_KEY');
+            $siteKey    = $this->request->getHeader('HTTP_X_SITE_KEY');
+
+            $this->auth->apiCheck();
+        }
+
         $allowed = $acl->isAllowed($role, 'API2CMS\\' . ucfirst($module) . '\\' . ucfirst($controller), $action);
 
         if ($allowed != Acl::ALLOW) {
