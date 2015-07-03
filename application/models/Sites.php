@@ -41,7 +41,7 @@ class Sites extends Model
     public function initialize()
     {
         $this->setSource("sites");
-        $this->belongsTo('accountId', 'Accounts', 'id');
+        $this->belongsTo('accountId', 'API2CMS\Models\Accounts', 'id',  array('alias' => 'Account'));
     }
 
     public function columnMap()

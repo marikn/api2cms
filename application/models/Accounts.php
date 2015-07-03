@@ -45,7 +45,8 @@ class Accounts extends Model
     public function initialize()
     {
         $this->setSource("accounts");
-        $this->hasMany('id', 'Sites', 'accountId');
+        $this->hasMany('id', 'API2CMS\Models\Sites', 'accountId', array('alias' => 'Sites'));
+        $this->hasMany('id', 'API2CMS\Models\Articles', 'author', array('alias' => 'Articles'));
     }
 
     public function columnMap()
