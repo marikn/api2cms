@@ -22,7 +22,7 @@ CREATE TABLE articles (
   meta_title varchar(255),
   meta_description varchar(255),
   meta_keywords varchar(255),
-  author int,
+  author int references accounts(id),
   date_created varchar(10) default to_char(CURRENT_DATE, 'yyyy-mm-dd'),
   cover varchar(255),
   blog varchar(1) DEFAULT 'N',
@@ -47,19 +47,21 @@ CREATE TABLE cms_types (
 );
 
 INSERT INTO cms_types (code, name, description, supported_versions) VALUES ('wordpess', 'Wordpress', 'Most popular CMS last years', '1.1 - 4.2');
+INSERT INTO cms_types (code, name, description, supported_versions) VALUES ('joomla', 'Joomla', 'Popular open source CMS', '1.1 - 3.0');
 
 DROP TABLE IF EXISTS sites;
 CREATE TABLE sites (
   id SERIAL,
-  account_id int,
+  account_id int references accounts(id),
   site_url varchar(255) NOT NULL,
   site_key varchar(32) NOT NULL,
-  cms_type varchar(255) NOT NULL,
+  cms_type int references cms_types(id),
   params text DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
 INSERT INTO sites (account_id, site_url, site_key, cms_type, params) VALUES (1, 'http://wordpress.dev', '73fabd830e8e2984ed351e4cefa5f6a7', 1, '');
+INSERT INTO sites (account_id, site_url, site_key, cms_type, params) VALUES (1, 'http://joomla.dev', '5d3410179093db3e7f5a02335e693575', 2, '');
 
 DROP TABLE IF EXISTS settings;
 CREATE TABLE settings (
