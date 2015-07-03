@@ -51,7 +51,7 @@ class Accounts extends Model
 
     public function columnMap()
     {
-        return [
+        return array(
             'id'        => 'id',
             'email'     => 'email',
             'first'     => 'firstName',
@@ -61,7 +61,7 @@ class Accounts extends Model
             'role'      => 'role',
             'params'    => 'params',
             'disable'   => 'disable'
-        ];
+        );
     }
 
     public static function findFirstByEmail($email)
