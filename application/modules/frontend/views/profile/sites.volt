@@ -12,6 +12,27 @@
     </div>
 
     {{ partial("partials/profile-menu") }}
-    Here will be pretty grid with list of sites, wich connect to your account.
 
+    <div style="float: right; width: 850px; margin: 20px;">
+        <table class="table table-striped">
+            <tr>
+                <th>#</th>
+                <th>Url</th>
+                <th>Token</th>
+                <th>Requests count</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for site in sites %}
+                <tr>
+                    <td> {{ site['id'] }} </td>
+                    <td> {{ site['siteUrl'] }} </td>
+                    <td> {{ site['siteKey'] }} </td>
+                    <td> <?php echo rand(10000, 100000); ?> </td>
+                    <th> </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
 </div>

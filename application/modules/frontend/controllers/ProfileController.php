@@ -11,12 +11,10 @@ namespace API2CMS\Frontend\Controllers;
 use API2CMS\Frontend\Forms\EditInfoForm;
 use API2CMS\Frontend\Models\Accounts;
 use Phalcon\Mvc\Controller;
+use Phalcon\Mvc\Model\Resultset;
 
 class ProfileController extends Controller
 {
-    /**
-     * @var Accounts
-     */
     protected $_account = null;
 
     public function initialize()
@@ -84,7 +82,9 @@ class ProfileController extends Controller
 
     public function sitesAction()
     {
+        $sites = $this->_account->getSites()->toArray();
 
+        $this->view->sites = $sites;
     }
 
     public function logsAction()
