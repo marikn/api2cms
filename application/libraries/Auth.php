@@ -6,10 +6,11 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace API2CMS\Auth;
+namespace API2CMS;
 
 use Phalcon\Mvc\User\Component;
 use API2CMS\Frontend\Models\Accounts;
+use API2CMS\Auth\Exception;
 
 class Auth extends Component
 {
@@ -38,9 +39,19 @@ class Auth extends Component
         ));
     }
 
-    public function apiCheck()
+    /**
+     * Check API credentials
+     *
+     * @param $apiKey
+     * @param $token
+     */
+    public function apiCheck($apiKey, $token)
     {
+        $accounts = new \API2CMS\Models\Accounts();
 
+        $accounts->checkAPICredentials($apiKey, $token);
+
+        return true;
     }
 
     public function getIdentity()

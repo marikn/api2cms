@@ -29,7 +29,6 @@ class Security extends Plugin
             $acl->addRole($roles['guest']);
             $acl->addRole($roles['user'], $roles['guest']);
             $acl->addRole($roles['admin'], $roles['user']);
-            $acl->addRole($roles['api']);
 
             $resources = $this->_defineResources();
 
@@ -83,14 +82,7 @@ class Security extends Plugin
 
         $acl = $this->getAcl();
 
-        if ($module == 'api') {
-            $apiKey     = $this->request->getHeader('HTTP_X_API_KEY');
-            $siteKey    = $this->request->getHeader('HTTP_X_SITE_KEY');
-
-            $this->auth->apiCheck();
-        }
-
-        $allowed = $acl->isAllowed($role, 'API2CMS\\' . ucfirst($module) . '\\' . ucfirst($controller), $action);
+        $allowed= $acl->isAllowed($role, 'API2CMS\\' . ucfirst($module) . '\\' . ucfirst($controller), $action);
 
         if ($allowed != Acl::ALLOW) {
             $dispatcher->forward(array(
@@ -109,7 +101,6 @@ class Security extends Plugin
             'guest' => new Role('guest'),
             'user'  => new Role('user'),
             'admin' => new Role('admin'),
-            'api'   => new Role('api'),
         );
 
         return $roles;
@@ -127,8 +118,6 @@ class Security extends Plugin
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Session'), 'actions' => array('login', 'signup', 'logout'));
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Error'), 'actions' => array('show404', 'show403'));
         $resources['public'][]    = array('resource' => new Resource('API2CMS\Frontend\Blog'), 'actions' => array('index', 'info'));
-
-        $resources['api'][]       = array('resource' => new Resource('API2CMS\API\Articles'), 'actions' => array('list', 'info'));
 
         return $resources;
     }

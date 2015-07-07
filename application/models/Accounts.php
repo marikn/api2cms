@@ -8,6 +8,10 @@
 
 namespace API2CMS\Models;
 
+use API2CMS\Account;
+use API2CMS\Auth\Exception;
+use API2CMS\Connector;
+use API2CMS\Site;
 use Phalcon\Di;
 use Phalcon\Mvc\Model;
 
@@ -72,5 +76,22 @@ class Accounts extends Model
     public static function findFirstById($id)
     {
         return self::findFirst('id=\'' . $id . '\'');
+    }
+
+    public function checkAPICredentials($apiKey, $token)
+    {
+        $account = self::findFirst("apiKey='$apiKey'");
+
+        if (!$account) {
+            throw new Exception('Account not found', 404);
+        }
+
+        $site = $account->getSites("siteKey='$token'")->toArray();
+
+        if (empty($site)) {
+            throw new Exception('Site not found', 404);
+        }
+
+        return true;
     }
 }

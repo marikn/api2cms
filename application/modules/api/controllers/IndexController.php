@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace API2CMS\API\Controllers;
+namespace API2CMS\Api\Controllers;
 
 class IndexController extends AbstractController
 {

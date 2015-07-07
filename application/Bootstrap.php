@@ -17,9 +17,7 @@ use Phalcon\Logger\Adapter\File         as LogsAdapter;
 use Phalcon\Flash\Direct                as Flash;
 use Phalcon\Mvc\Application;
 use Phalcon\Security;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Events\Manager;
-use API2CMS\Auth\Auth;
 use API2CMS\Plugins\Security            as Acl;
 
 class Bootstrap
@@ -59,7 +57,7 @@ class Bootstrap
         });
 
         $di->set('auth', function() {
-            return new Auth();
+            return new API2CMS\Auth();
         });
 
         $di->set('security', function() {
@@ -82,18 +80,12 @@ class Bootstrap
             ));
         });
 
-        $di->set('dispatcher', function() use ($di) {
-
+        $di->set('eventsManager', function() {
             $eventsManager = new Manager();
-
             $eventsManager->attach('dispatch:beforeDispatch', new Acl());
 
-            $dispatcher = new Dispatcher;
-            $dispatcher->setEventsManager($eventsManager);
-
-            return $dispatcher;
+            return $eventsManager;
         });
-
 
         $application = new Application();
 
