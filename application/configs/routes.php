@@ -10,6 +10,7 @@ use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Group as RouterGroup;
 
 $router = new Router(false);
+$router->removeExtraSlashes(true);
 
 $router->add('/', array(
     'module'     => 'frontend',
@@ -57,6 +58,7 @@ foreach ($config->get('modules') as $key => $module) {
             ));
 
             $router->mount($api);
+
             break;
         case 'frontend':
             $router->add('/', array(
@@ -134,6 +136,7 @@ foreach ($config->get('modules') as $key => $module) {
             ))->setName($key);
 
             $router->mount($admin);
+
             break;
         default:
             break;

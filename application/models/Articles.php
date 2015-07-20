@@ -45,6 +45,7 @@ class Articles extends Model
     public function initialize()
     {
         $this->setSource("articles");
+        $this->belongsTo('author', 'API2CMS\Models\Accounts', 'id',  array('alias' => 'Account'));
     }
 
     public function columnMap()

@@ -8,6 +8,10 @@
 
 namespace API2CMS\Models;
 
+use API2CMS\Account;
+use API2CMS\Auth\Exception;
+use API2CMS\Connector;
+use API2CMS\Site;
 use Phalcon\Di;
 use Phalcon\Mvc\Model;
 
@@ -45,7 +49,8 @@ class Accounts extends Model
     public function initialize()
     {
         $this->setSource("accounts");
-        $this->hasMany('id', 'Sites', 'accountId');
+        $this->hasMany('id', 'API2CMS\Models\Sites', 'accountId', array('alias' => 'Sites'));
+        $this->hasMany('id', 'API2CMS\Models\Articles', 'author', array('alias' => 'Articles'));
     }
 
     public function columnMap()
@@ -71,5 +76,22 @@ class Accounts extends Model
     public static function findFirstById($id)
     {
         return self::findFirst('id=\'' . $id . '\'');
+    }
+
+    public function checkAPICredentials($apiKey, $token)
+    {
+        $account = self::findFirst("apiKey='$apiKey'");
+
+        if (!$account) {
+            throw new Exception('Incorrect API key', 403);
+        }
+
+        $site = $account->getSites("siteKey='$token'")->toArray();
+
+        if (empty($site)) {
+            throw new Exception('Incorrect site key', 403);
+        }
+
+        return true;
     }
 }

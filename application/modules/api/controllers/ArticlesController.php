@@ -6,13 +6,15 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace API2CMS\API\Controllers;
+namespace API2CMS\Api\Controllers;
+
+use API2CMS\Site;
 
 class ArticlesController extends AbstractController
 {
     public function listAction()
     {
-        $this->view->disable();
+        $site = Site::getInstance();
 
         $this->response->setJsonContent(array('response_code' => 0, 'response_message' => 'It is method for list articles'));
         $this->response->send();
@@ -20,8 +22,6 @@ class ArticlesController extends AbstractController
 
     public function infoAction()
     {
-        $this->view->disable();
-
         $id = $this->dispatcher->getParam('id');
 
         $this->response->setJsonContent(array('response_code' => 0, 'response_message' => 'It is method for get info about article #' . $id));

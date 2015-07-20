@@ -8,6 +8,7 @@
 
 namespace API2CMS\API;
 
+use Phalcon\Di;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\DiInterface;
 use Phalcon\Loader;
@@ -27,8 +28,8 @@ class Module implements ModuleDefinitionInterface
 
         $loader->registerNamespaces(
             array(
-                'API2CMS\API\Controllers' => APPLICATION_PATH . '/modules/api/controllers/',
-                'API2CMS\API\Models'      => APPLICATION_PATH . '/modules/api/models/',
+                'API2CMS\Api\Controllers' => APPLICATION_PATH . '/modules/api/controllers/',
+                'API2CMS\Api\Models'      => APPLICATION_PATH . '/modules/api/models/',
             )
         );
 
@@ -43,11 +44,12 @@ class Module implements ModuleDefinitionInterface
     public function registerServices(DiInterface $di)
     {
         $di->set('dispatcher', function() {
+
             $dispatcher = new Dispatcher();
-            $dispatcher->setDefaultNamespace('API2CMS\API\Controllers');
+            $dispatcher->setDefaultNamespace('API2CMS\Api\Controllers');
 
             return $dispatcher;
-        });
+        }, true);
 
         $di->set('view', function() {
             $view = new View();
