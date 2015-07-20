@@ -46,13 +46,13 @@ class Sites extends Model
 
     public function columnMap()
     {
-        return [
+        return array(
             'id'         => 'id',
             'account_id' => 'accountId',
             'site_url'   => 'siteUrl',
             'site_key'   => 'siteKey',
             'cms_type'   => 'cmsType',
             'params'     => 'params',
-        ];
+        );
     }
 }
