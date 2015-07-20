@@ -39,12 +39,18 @@ class Site extends Component
     {
         $this->url     = $site['siteUrl'];
         $this->token   = $site['siteKey'];
-//        $this->disable = $site->disable;
+        $this->disable = false;
         $this->params  = $site['params'];
     }
 
     public function isActive()
     {
         return ($this->disable == 'Y') ? false : true;
+    }
+
+    private function _detectVersion()
+    {
+        $connector = Connector::getInstance();
+
     }
 }

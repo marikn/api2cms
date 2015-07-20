@@ -26,6 +26,7 @@ class AbstractController extends Controller
 
         try {
             $this->_apiAuth($apiKey, $token);
+            $this->_init($apiKey, $token);
         } catch (\API2CMS\Auth\Exception $e) {
             return $dispatcher->forward(array(
                 'namespace'  => 'API2CMS\Api\Controllers',
@@ -33,9 +34,21 @@ class AbstractController extends Controller
                 'action'     => 'error',
                 'params'     => array('code' => $e->getCode(), 'message' => $e->getMessage())
             ));
+        } catch (\API2CMS\Connector\Exception $e) {
+            return $dispatcher->forward(array(
+                'namespace'  => 'API2CMS\Api\Controllers',
+                'controller' => 'error',
+                'action'     => 'error',
+                'params'     => array('code' => $e->getCode(), 'message' => $e->getMessage())
+            ));
+        } catch (\Exception $e) {
+            return $dispatcher->forward(array(
+                'namespace'  => 'API2CMS\Api\Controllers',
+                'controller' => 'error',
+                'action'     => 'error',
+                'params'     => array('code' => 500, 'message' => 'Internal Service Error')
+            ));
         }
-
-        $this->_init($apiKey, $token);
     }
 
     private function _apiAuth($apiKey, $token)
