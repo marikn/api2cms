@@ -16,31 +16,33 @@ use Phalcon\Mvc\Controller;
 
 class AbstractController extends Controller
 {
-    public function initialize()
+    public function beforeExecuteRoute($dispatcher)
     {
-        $apiKey     = $this->request->getHeader('HTTP_X_API_KEY');
-        $token      = $this->request->getHeader('HTTP_X_TOKEN');
-
-        $this->_apiAuth($apiKey, $token);
-        $this->_init($apiKey, $token);
-
         $this->view->disable();
-
         $this->response->setContentType('application/json');
+
+        $apiKey = $this->request->getHeader('HTTP_X_API_KEY');
+        $token  = $this->request->getHeader('HTTP_X_TOKEN');
+
+        try {
+            $this->_apiAuth($apiKey, $token);
+        } catch (\API2CMS\Auth\Exception $e) {
+            return $dispatcher->forward(array(
+                'namespace'  => 'API2CMS\Api\Controllers',
+                'controller' => 'error',
+                'action'     => 'error',
+                'params'     => array('code' => $e->getCode(), 'message' => $e->getMessage())
+            ));
+        }
+
+        $this->_init($apiKey, $token);
     }
 
     private function _apiAuth($apiKey, $token)
     {
-        try {
-            $this->auth->apiCheck($apiKey, $token);
-        } catch (\API2CMS\Auth\Exception $e) {
-            $this->dispatcher->forward(array(
-                'module'     => 'api',
-                'controller' => 'error',
-                'action'     => 'show403'
-            ));
-        }
+        $this->auth->apiCheck($apiKey, $token);
     }
+
     private function _init($apiKey, $token)
     {
         $account = Accounts::findFirst("apiKey='$apiKey'");
@@ -55,8 +57,7 @@ class AbstractController extends Controller
         $siteInstance->init($site);
 
         $connector = Connector::getInstance();
-        $connector->uri = $site['siteUrl'] . 'cms_bridge/bridge.php';
-
+        $connector->uri = $site['siteUrl'] . '/cms_bridge/bridge.php';
         $connector->check();
     }
 }

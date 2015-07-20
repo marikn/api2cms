@@ -12,7 +12,6 @@ class ArticlesController extends AbstractController
 {
     public function listAction()
     {
-
         $this->response->setJsonContent(array('response_code' => 0, 'response_message' => 'It is method for list articles'));
         $this->response->send();
     }

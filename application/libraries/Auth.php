@@ -44,14 +44,14 @@ class Auth extends Component
      *
      * @param $apiKey
      * @param $token
+     *
+     * @return boolean
      */
     public function apiCheck($apiKey, $token)
     {
         $accounts = new \API2CMS\Models\Accounts();
 
-        $accounts->checkAPICredentials($apiKey, $token);
-
-        return true;
+        return $accounts->checkAPICredentials($apiKey, $token);
     }
 
     public function getIdentity()

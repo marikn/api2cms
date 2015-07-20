@@ -8,20 +8,30 @@
 
 namespace API2CMS\Api\Controllers;
 
-class ErrorController extends AbstractController
+use Phalcon\Mvc\Controller;
+
+class ErrorController extends Controller
 {
-    public function show404Action()
+    public function errorAction()
     {
-        $this->response->setJsonContent(array('response_code' => 1, 'response_message' => 'API method not found'));
-        $this->response->setStatusCode(404);
+        $params = $this->dispatcher->getParams();
+
+        if (!isset($params['code']) || !isset($params['message'])) {
+            return $this->dispatcher->forward(array(
+                'action' => 'internal',
+            ));
+        }
+
+        $this->response->setJsonContent(array('response_code' => 0, 'response_message' => $params['message']));
+        $this->response->setStatusCode($params['code']);
 
         $this->response->send();
     }
 
-    public function show403Action()
+    public function internalAction()
     {
-        $this->response->setJsonContent(array('response_code' => 2, 'response_message' => 'Incorrect API credentials'));
-        $this->response->setStatusCode(403);
+        $this->response->setJsonContent(array('response_code' => 0, 'response_message' => 'Internal service error'));
+        $this->response->setStatusCode(500);
 
         $this->response->send();
     }

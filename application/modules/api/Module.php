@@ -8,9 +8,7 @@
 
 namespace API2CMS\API;
 
-use API2CMS\Plugins\Security;
 use Phalcon\Di;
-use Phalcon\Events\Manager;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\DiInterface;
 use Phalcon\Loader;
@@ -46,14 +44,12 @@ class Module implements ModuleDefinitionInterface
     public function registerServices(DiInterface $di)
     {
         $di->set('dispatcher', function() {
-//            $eventsManager = Di::getDefault()->geteventsManager();
 
             $dispatcher = new Dispatcher();
             $dispatcher->setDefaultNamespace('API2CMS\Api\Controllers');
-//            $dispatcher->setEventsManager($eventsManager);
 
             return $dispatcher;
-        });
+        }, true);
 
         $di->set('view', function() {
             $view = new View();

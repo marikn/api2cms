@@ -83,13 +83,13 @@ class Accounts extends Model
         $account = self::findFirst("apiKey='$apiKey'");
 
         if (!$account) {
-            throw new Exception('Account not found', 404);
+            throw new Exception('Incorrect API key', 403);
         }
 
         $site = $account->getSites("siteKey='$token'")->toArray();
 
         if (empty($site)) {
-            throw new Exception('Site not found', 404);
+            throw new Exception('Incorrect site key', 403);
         }
 
         return true;
