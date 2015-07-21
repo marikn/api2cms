@@ -10,7 +10,6 @@
 
     {{ partial("partials/profile-menu") }}
 
-</div>
     <div style="float: right; width: 850px; margin: 20px;">
         <table class="table table-striped">
             <tr>
