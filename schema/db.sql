@@ -46,7 +46,7 @@ CREATE TABLE cms_types (
   PRIMARY KEY (id)
 );
 
-INSERT INTO cms_types (code, name, description, supported_versions) VALUES ('wordpess', 'Wordpress', 'Most popular CMS last years', '1.1 - 4.2');
+INSERT INTO cms_types (code, name, description, supported_versions) VALUES ('wordpress', 'Wordpress', 'Most popular CMS last years', '1.1 - 4.2');
 INSERT INTO cms_types (code, name, description, supported_versions) VALUES ('joomla', 'Joomla', 'Popular open source CMS', '1.1 - 3.0');
 
 DROP TABLE IF EXISTS sites;

@@ -11,6 +11,7 @@ namespace API2CMS\Api\Controllers;
 use API2CMS\Account;
 use API2CMS\Connector;
 use API2CMS\Models\Accounts;
+use API2CMS\Models\Sites;
 use API2CMS\Site;
 use Phalcon\Mvc\Controller;
 
@@ -63,14 +64,11 @@ class AbstractController extends Controller
         $accountInstance = Account::getInstance();
         $accountInstance->init($account);
 
-        $site = $account->getSites("siteKey='$token'")->toArray();
-        $site = array_shift($site);
+        $site = Sites::findFirst("siteKey='$token'");
 
         $siteInstance = Site::getInstance();
-        $siteInstance->init($site);
 
-        $connector = Connector::getInstance();
-        $connector->uri = $site['siteUrl'] . '/cms_bridge/bridge.php';
-        $connector->check();
+        $siteInstance->init($site);
+        $siteInstance->check();
     }
 }

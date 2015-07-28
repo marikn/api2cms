@@ -12,7 +12,8 @@ use Phalcon\Mvc\User\Component;
 
 class Connector extends Component
 {
-    protected $uri = '';
+    protected $url   = '';
+    protected $token = '';
 
     protected static $_instance;
 
@@ -20,9 +21,6 @@ class Connector extends Component
 
     private function __clone(){}
 
-    /**
-     * @return Connector
-     */
     public static function getInstance()
     {
         if (null === self::$_instance) {
@@ -38,7 +36,7 @@ class Connector extends Component
             return $this->$name;
         }
 
-        throw new \InvalidArgumentException('Column ' . $name . ' not exist!');
+        throw new \InvalidArgumentException('Property "' . $name . '" not exist!');
     }
 
     public function __set($name, $value)
@@ -48,15 +46,27 @@ class Connector extends Component
             return true;
         }
 
-        throw new \InvalidArgumentException('Column ' . $name . ' not exist!');
+        throw new \InvalidArgumentException('Property "' . $name . '" not exist!');
     }
 
     public function check()
     {
+        $this->_request('api2cms/bridge.php', array('ver' => '1.0', 'action' => 'check'));
+    }
+
+    public function detectSiteVersion()
+    {
+        return '1.0.0';
+    }
+
+    private function _request($url, $params = array())
+    {
         $request = new \HttpRequest();
-        $request->setUrl('https://www.api2cart.com/');
+        $request->setUrl('https://www.api2cart.com');   //TODO Temporary, after testing change to $this->url . $url);
         $request->setOptions(array('timeout'=>100, 'useragent'=>"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12"));
-        $request->setBody('');
+        $request->setPostFields($params);
+
+        $request->addPostFields(array('token' => $this->token));
 
         try {
             $response = $request->send();
@@ -69,10 +79,7 @@ class Connector extends Component
         if (!in_array($response->getResponseCode(), array(200, 302))) {
             throw new \API2CMS\Connector\Exception($response->getResponseStatus(), $response->getResponseCode());
         }
-    }
 
-    public function request()
-    {
-
+        return (isset($response)) ? $request : false;
     }
 }

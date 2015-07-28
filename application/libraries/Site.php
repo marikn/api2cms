@@ -8,6 +8,7 @@
 
 namespace API2CMS;
 
+use API2CMS\Param\Exception;
 use Phalcon\Mvc\User\Component;
 
 class Site extends Component
@@ -15,7 +16,14 @@ class Site extends Component
     protected $url;
     protected $token;
     protected $disable;
+    protected $cms;
     protected $params;
+    protected $version;
+
+    /**
+     * @var \API2CMS\Connector $_connector
+     */
+    private $_connector;
 
     protected static $_instance;
 
@@ -24,7 +32,7 @@ class Site extends Component
     private function __clone(){}
 
     /**
-     * @return Site
+     * @return \API2CMS\Site
      */
     public static function getInstance()
     {
@@ -37,20 +45,64 @@ class Site extends Component
 
     public function init($site)
     {
-        $this->url     = $site['siteUrl'];
-        $this->token   = $site['siteKey'];
+        $this->url     = $site->siteUrl;
+        $this->token   = $site->siteKey;
         $this->disable = false;
-        $this->params  = $site['params'];
+        $this->params  = $site->params;
+        $this->cms     = $site->getCms()->code;
+
+        $this->_initConnector();
+        $this->_detectVersion();
     }
 
-    public function isActive()
+    public function check()
     {
-        return ($this->disable == 'Y') ? false : true;
+        $this->_connector->check();
+    }
+
+    public function export($entity, $method, $params)
+    {
+        $cms = '\API2CMS\Cms\\' . $this->cms . '\\' . ucfirst($entity);
+
+        $cmsInstance = new $cms;
+        $cmsInstance->$method();
+        var_export($cmsInstance);die;
+    }
+
+    private function _initConnector()
+    {
+        $this->_connector = Connector::getInstance();
+
+        $this->_connector->url   = $this->url;
+        $this->_connector->token = $this->token;
     }
 
     private function _detectVersion()
     {
-        $connector = Connector::getInstance();
+        $version = $this->_connector->detectSiteVersion();
 
+        $cms = '\API2CMS\Cms\\' . ucfirst($this->cms);
+
+        $this->version = $cms::convertVersion($version, $cms::$_versionMapping);
+    }
+
+    private function _getPagination($params)
+    {
+        $pagination = array(
+
+        );
+
+        $page  = 0;
+        $limit = 50;
+
+        $result = Param::validate($params, 'int', 'page', false);
+
+        if (Param::PARAM_EXISTS === $result) {
+            $page = $params['page'];
+        }
+
+
+        $page   = isset($params['page']) ? $params['page'] : 0;
+        $limit  = isset($params['limit']) ? $params['limit'] : 50;
     }
 }

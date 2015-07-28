@@ -14,7 +14,11 @@ class ArticlesController extends AbstractController
 {
     public function listAction()
     {
+        $params = $this->request->getQuery();
+
         $site = Site::getInstance();
+
+        $site->export('articles', 'get', $params);
 
         $this->response->setJsonContent(array('response_code' => 0, 'response_message' => 'It is method for list articles'));
         $this->response->send();
