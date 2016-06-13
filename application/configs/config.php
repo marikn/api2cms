@@ -8,10 +8,16 @@
 
 return new \Phalcon\Config(array(
     'db' => array(
-        'host'      => 'localhost',
-        'username'  => 'postgres',
-        'password'  => 'sk.cnhfn0h',
+        'host'      => 'pgsql',
+        'username'  => 'api2cms',
+        'password'  => 'temp123',
         'dbname'    => 'api2cms',
+    ),
+    'redis' => array(
+        'host'       => 'localhost',
+        'port'       => 6379,
+        'auth'       => 'foobared',
+        'persistent' => false
     ),
     'url' => array(
         'baseUri' => '/',
@@ -27,8 +33,12 @@ return new \Phalcon\Config(array(
             'path' => APPLICATION_PATH . '/modules/admin/Module.php',
         ),
         'api' => array(
-            'className' => 'API2CMS\Api\Module',
+            'className' => 'API2CMS\API\Module',
             'path' => APPLICATION_PATH . '/modules/api/Module.php',
         ),
+    ),
+    'bridge' => array(
+        'buildDir'      => PUBLIC_PATH . '/tmp',
+        'bridgeDirName' => 'cms_bridge'
     )
 ));

@@ -9,8 +9,9 @@
 namespace API2CMS;
 
 use API2CMS\Param\Exception;
+use Phalcon\Mvc\User\Component;
 
-class Param
+class Param extends Component
 {
     const PARAM_NOT_EXISTS = 0;
     const PARAM_EXISTS     = 1;

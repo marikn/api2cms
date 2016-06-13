@@ -1,0 +1,13 @@
+{
+    "require": {
+        "phalcon/devtools": "dev-master",
+        "guzzlehttp/guzzle": "^6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "API2CMS\\Models\\":  "application/models/",
+            "API2CMS\\Plugins\\": "application/plugins/",
+            "API2CMS\\":          "application/libraries/"
+        }
+    }
+}

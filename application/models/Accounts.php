@@ -80,18 +80,30 @@ class Accounts extends Model
 
     public function checkAPICredentials($apiKey, $token)
     {
+        $account = $this->checkAPIKey($apiKey);
+
+        $this->checkToken($account, $token);
+
+        return true;
+    }
+
+    public function checkAPIKey($apiKey)
+    {
         $account = self::findFirst("apiKey='$apiKey'");
 
         if (!$account) {
             throw new Exception('Incorrect API key', 403);
         }
 
+        return $account;
+    }
+
+    public function checkToken($account, $token)
+    {
         $site = $account->getSites("siteKey='$token'")->toArray();
 
         if (empty($site)) {
             throw new Exception('Incorrect site key', 403);
         }
-
-        return true;
     }
 }

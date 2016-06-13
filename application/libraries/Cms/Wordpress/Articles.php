@@ -9,6 +9,7 @@
 namespace API2CMS\Cms\Wordpress;
 
 use API2CMS\Cms\Entity;
+use Phalcon\Db;
 
 class Articles extends Entity implements \API2CMS\Cms\Instance\Entity
 {
@@ -37,7 +38,15 @@ class Articles extends Entity implements \API2CMS\Cms\Instance\Entity
      */
     public function get($page, $limit, $params, $filter)
     {
-        // TODO: Implement get() method.
+        $res = $this->_db->query('
+            SELECT
+                *
+            FROM articles as a
+            WHERE 1
+            LIMIT ' . (int)($limit * $page) . ', ' . (int)$limit
+        );
+
+
     }
 
     /**

@@ -6,9 +6,9 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace API2CMS\Api\Controllers;
+namespace API2CMS\API\Controllers;
 
-class CommentsController extends AbstractController
+class CommentsController extends Controller
 {
     public function listAction()
     {}

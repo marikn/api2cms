@@ -28,8 +28,8 @@ class Module implements ModuleDefinitionInterface
 
         $loader->registerNamespaces(
             array(
-                'API2CMS\Api\Controllers' => APPLICATION_PATH . '/modules/api/controllers/',
-                'API2CMS\Api\Models'      => APPLICATION_PATH . '/modules/api/models/',
+                'API2CMS\API\Controllers' => APPLICATION_PATH . '/modules/api/controllers/',
+                'API2CMS\API\Models'      => APPLICATION_PATH . '/modules/api/models/',
             )
         );
 
@@ -46,7 +46,7 @@ class Module implements ModuleDefinitionInterface
         $di->set('dispatcher', function() {
 
             $dispatcher = new Dispatcher();
-            $dispatcher->setDefaultNamespace('API2CMS\Api\Controllers');
+            $dispatcher->setDefaultNamespace('API2CMS\API\Controllers');
 
             return $dispatcher;
         }, true);

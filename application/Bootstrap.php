@@ -87,6 +87,25 @@ class Bootstrap
             return $eventsManager;
         });
 
+        $di->set('cache', function() {
+            $redis = new Redis();
+            $redis->connect("localhost", "6379");
+
+            $frontend = new Phalcon\Cache\Frontend\Data(array(
+                'lifetime' => 3600
+            ));
+
+            $cache = new Phalcon\Cache\Backend\Redis($frontend, array(
+                'redis' => $redis
+            ));
+
+            return $cache;
+        });
+
+        $di->set('bridge', function() use($config) {
+            return $config->bridge;
+        });
+
         $application = new Application();
 
         $application->registerModules($config->modules->toArray());

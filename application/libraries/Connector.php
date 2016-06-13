@@ -9,6 +9,7 @@
 namespace API2CMS;
 
 use Phalcon\Mvc\User\Component;
+use \GuzzleHttp\Client as HttpClient;
 
 class Connector extends Component
 {
@@ -61,25 +62,25 @@ class Connector extends Component
 
     private function _request($url, $params = array())
     {
-        $request = new \HttpRequest();
-        $request->setUrl('https://www.api2cart.com');   //TODO Temporary, after testing change to $this->url . $url);
-        $request->setOptions(array('timeout'=>100, 'useragent'=>"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12"));
-        $request->setPostFields($params);
-
-        $request->addPostFields(array('token' => $this->token));
+        $client = new HttpClient();
 
         try {
-            $response = $request->send();
-        } catch (\HttpInvalidParamException $e) {
-            throw new \API2CMS\Connector\Exception('Site is unreacheble or not exists', 404);
+            $response = $client->request('GET', 'https://www.api2cart.com', [
+                'timeout'   => '100',
+                'useragent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12',
+                'token'     => $this->token,
+                $params,
+            ]);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            throw new Connector\Exception('Site is unreacheble or not exists', 404);
         } catch (\Exception $e) {
-            throw new \API2CMS\Connector\Exception('Internal service error', 500);
+            throw new Connector\Exception('Internal service error', 500);
         }
 
-        if (!in_array($response->getResponseCode(), array(200, 302))) {
-            throw new \API2CMS\Connector\Exception($response->getResponseStatus(), $response->getResponseCode());
+        if (!in_array($response->getStatusCode(), array(200, 302))) {
+            throw new Connector\Exception($response->getReasonPhrase() , $response->getStatusCode());
         }
 
-        return (isset($response)) ? $request : false;
+        return (isset($response)) ? $response->getBody() : false;
     }
 }

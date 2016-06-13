@@ -6,16 +6,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace API2CMS\Cms;
+namespace API2CMS\Bridge;
 
-use API2CMS\Db;
-
-abstract class Entity
-{
-    protected $_db;
-
-    public function __construct()
-    {
-        $this->_db = Db::getInstance();
-    }
-}
+class Exception extends \Exception
+{}

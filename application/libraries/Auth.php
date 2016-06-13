@@ -14,6 +14,9 @@ use API2CMS\Auth\Exception;
 
 class Auth extends Component
 {
+    private $_apiKey = null;
+    private $_token  = null;
+
     /**
      * Checks the user credentials
      *
@@ -49,9 +52,29 @@ class Auth extends Component
      */
     public function apiCheck($apiKey, $token)
     {
+        $this->_apiKey = $apiKey;
+        $this->_token  = $token;
+
         $accounts = new \API2CMS\Models\Accounts();
 
         return $accounts->checkAPICredentials($apiKey, $token);
+    }
+
+    /**
+     *  Check User by APIKey
+     */
+    public function checkAccountByApiKey($apiKey)
+    {
+        $this->_apiKey = $apiKey;
+
+        $accounts = new \API2CMS\Models\Accounts();
+        $accounts->checkAPIKey($apiKey);
+
+        if (!empty($accounts)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getIdentity()
@@ -114,5 +137,25 @@ class Auth extends Component
         if ($user->disable != 'Y') {
             throw new Exception('The user is inactive');
         }
+    }
+
+    public function getApiKey()
+    {
+        return $this->_apiKey;
+    }
+
+    public function getToken()
+    {
+        return $this->_token;
+    }
+
+    public function setToken($token)
+    {
+        $this->_token = $token;
+    }
+
+    public function generateToken()
+    {
+        return md5(uniqid('', true));
     }
 }

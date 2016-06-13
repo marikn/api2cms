@@ -6,9 +6,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace API2CMS\Api\Controllers;
-
-use Phalcon\Mvc\Controller;
+namespace API2CMS\API\Controllers;
 
 class ErrorController extends Controller
 {

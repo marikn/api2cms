@@ -57,6 +57,10 @@ foreach ($config->get('modules') as $key => $module) {
                 'action' => 'delete',
             ));
 
+            $api->addPost('/{controller:(bridge)}', array('action' => 'create'));
+
+            $api->addGet('/{controller:(bridge)}', array('action' => 'download'));
+
             $router->mount($api);
 
             break;

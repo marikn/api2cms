@@ -8,7 +8,6 @@
 
 namespace API2CMS;
 
-use API2CMS\Param\Exception;
 use Phalcon\Mvc\User\Component;
 
 class Site extends Component
@@ -24,6 +23,11 @@ class Site extends Component
      * @var \API2CMS\Connector $_connector
      */
     private $_connector;
+
+    /**
+     * @var \API2CMS\Db $_db
+     */
+    private $_db;
 
     protected static $_instance;
 
@@ -52,6 +56,7 @@ class Site extends Component
         $this->cms     = $site->getCms()->code;
 
         $this->_initConnector();
+        $this->_initDb();
         $this->_detectVersion();
     }
 
@@ -65,8 +70,10 @@ class Site extends Component
         $cms = '\API2CMS\Cms\\' . $this->cms . '\\' . ucfirst($entity);
 
         $cmsInstance = new $cms;
-        $cmsInstance->$method();
-        var_export($cmsInstance);die;
+
+        $pagination = $this->_getPagination($params);
+
+        $data = $cmsInstance->$method($pagination['page'], $pagination['limit'], $params, array());
     }
 
     private function _initConnector()
@@ -75,6 +82,13 @@ class Site extends Component
 
         $this->_connector->url   = $this->url;
         $this->_connector->token = $this->token;
+    }
+
+    private function _initDb()
+    {
+        $dbInstance = Db::getInstance();
+
+        $this->_db = $dbInstance;
     }
 
     private function _detectVersion()
@@ -89,20 +103,24 @@ class Site extends Component
     private function _getPagination($params)
     {
         $pagination = array(
-
+            'page'  => 0,
+            'limit' => 50
         );
-
-        $page  = 0;
-        $limit = 50;
 
         $result = Param::validate($params, 'int', 'page', false);
 
         if (Param::PARAM_EXISTS === $result) {
-            $page = $params['page'];
+            $pagination['page'] = $params['page'];
         }
 
+        unset($result);
 
-        $page   = isset($params['page']) ? $params['page'] : 0;
-        $limit  = isset($params['limit']) ? $params['limit'] : 50;
+        $result = Param::validate($params, 'int', 'limit', false);
+
+        if (Param::PARAM_EXISTS === $result) {
+            $pagination['limit'] = $params['limit'];
+        }
+
+        return $pagination;
     }
 }
