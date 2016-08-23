@@ -22,14 +22,19 @@ use API2CMS\Plugins\Security            as Acl;
 
 class Bootstrap
 {
-    public static function run()
-    {
-        $di = new FactoryDefault();
+    private $_di;
 
+    public function __construct($di)
+    {
+        $this->_di = $di;
+    }
+
+    public function run($options = array())
+    {
         $config = include APPLICATION_PATH . '/configs/config.php';
                   include APPLICATION_PATH . '/configs/loader.php';
 
-        $di->set('url', function() use ($config) {
+        $this->_di->set('url', function() use ($config) {
             $url = new UrlResolver();
             $url->setBaseUri        ($config->url->baseUri);
             $url->setStaticBaseUri  ($config->url->staticBaseUri);
@@ -37,41 +42,41 @@ class Bootstrap
             return $url;
         }, true);
 
-        $di->set('db', function() use ($config) {
+        $this->_di->set('db', function() use ($config) {
             return new DbAdapter($config->db->toArray());
         });
 
-        $di->set('modelsMetadata', function() {
+        $this->_di->set('modelsMetadata', function() {
             return new MetaDataAdapter();
         });
 
-        $di->setShared('session', function() {
+        $this->_di->setShared('session', function() {
             $session = new SessionAdapter();
             $session->start();
 
             return $session;
         });
 
-        $di->setShared('logger', function() {
+        $this->_di->setShared('logger', function() {
             return new LogsAdapter(APPLICATION_PATH . '/logs/' . APPLICATION_ENV . '.log');
         });
 
-        $di->set('auth', function() {
+        $this->_di->set('auth', function() {
             return new API2CMS\Auth();
         });
 
-        $di->set('security', function() {
+        $this->_di->set('security', function() {
             $security = new Security();
             $security->setWorkFactor(12);
 
             return $security;
         });
 
-        $di->set('router', function() use ($config) {
+        $this->_di->set('router', function() use ($config) {
             return require APPLICATION_PATH . '/configs/routes.php';
         });
 
-        $di->set('flash', function() {
+        $this->_di->set('flash', function() {
             return new Flash(array(
                 'error'     => 'alert alert-danger',
                 'success'   => 'alert alert-success',
@@ -80,14 +85,14 @@ class Bootstrap
             ));
         });
 
-        $di->set('eventsManager', function() {
+        $this->_di->set('eventsManager', function() {
             $eventsManager = new Manager();
             $eventsManager->attach('dispatch:beforeDispatch', new Acl());
 
             return $eventsManager;
         });
 
-        $di->set('cache', function() {
+        $this->_di->set('cache', function() {
             $redis = new Redis();
             $redis->connect("localhost", "6379");
 
@@ -102,15 +107,14 @@ class Bootstrap
             return $cache;
         });
 
-        $di->set('bridge', function() use($config) {
+        $this->_di->set('bridge', function() use($config) {
             return $config->bridge;
         });
 
-        $application = new Application();
+        $application = new Application($this->_di);
 
         $application->registerModules($config->modules->toArray());
-        $application->setDI($di);
 
-        echo $application->handle()->getContent();
+        return $application->handle()->getContent();
     }
 }

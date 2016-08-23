@@ -13,8 +13,10 @@ define('APPLICATION_ENV', getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') 
 try {
 
     require_once APPLICATION_PATH . '/Bootstrap.php';
-    Bootstrap::run();
 
+    $bootstrap = new Bootstrap(new \Phalcon\Di\FactoryDefault());
+
+    echo $bootstrap->run();
 } catch (\Exception $e) {
     echo $e->getMessage();
 }

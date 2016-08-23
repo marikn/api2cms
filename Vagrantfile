@@ -3,6 +3,8 @@
 
 Vagrant.configure(2) do |config|
 
+  config.ssh.insert_key = false
+
   # Base Box
   # --------------------
   config.vm.box = "centos/7"
@@ -20,7 +22,7 @@ Vagrant.configure(2) do |config|
   config.vm.provider :virtualbox do |v|
     # How much RAM to give the VM (in MB)
     # -----------------------------------
-    v.customize ["modifyvm", :id, "--memory", "2048"]
+    v.customize ["modifyvm", :id, "--memory", "512"]
 
     # Comment the bottom two lines to disable muli-core in the VM
     v.customize ["modifyvm", :id, "--cpus", "2"]
