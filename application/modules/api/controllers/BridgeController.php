@@ -27,11 +27,16 @@ class BridgeController extends Controller
     {
         $token = $this->auth->getToken();
 
-        $bridge = new Bridge();
+        $bridge  = new Bridge();
 
-        $bridge->download($token);
+        $content = $bridge->download($token);
 
-        $this->response->setJsonContent(array('response_code' => 0, 'response_message' => 'It is method for get bridge'));
+        $this->response->setHeader('Content-Disposition', 'attachment; filename="cms_bridge.zip"');
+        $this->response->setHeader('Content-Transfer-Encoding', 'binary');
+        $this->response->setHeader('Pragma', 'public');
+
+        $this->response->setContentType('application/zip');
+        $this->response->setContent($content);
         $this->response->send();
     }
 }

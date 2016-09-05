@@ -23,13 +23,13 @@ class Bridge extends Component
     public function download($token)
     {
         $bridgeDir         = $this->_bridgeConfig->buildDir . '/' . $token . '/' . $this->_bridgeConfig->bridgeDirName;
-        $bridgeArchivePath = $bridgeDir . 'cms_bridge.zip';
-        
+        $bridgeArchivePath = $bridgeDir . '/cms_bridge.zip';
+
         $this->_prepare($token, $bridgeDir);
 
         $zip = new Zip();
         $zip->open($bridgeArchivePath, Zip::OVERWRITE | Zip::CREATE );
-        $zip->addDirectory($bridgeArchivePath, '');
+        $zip->addDirectory($bridgeDir, '');
         $zip->close();
         $zip->download($bridgeArchivePath);
 

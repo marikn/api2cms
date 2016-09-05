@@ -67,7 +67,7 @@ class Site extends Component
 
     public function export($entity, $method, $params)
     {
-        $cms = '\API2CMS\Cms\\' . $this->cms . '\\' . ucfirst($entity);
+        $cms = '\API2CMS\Cms\\' . ucfirst($this->cms) . '\\' . ucfirst($entity);
 
         $cmsInstance = new $cms;
 
