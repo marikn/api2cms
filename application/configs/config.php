@@ -8,7 +8,7 @@
 
 return new \Phalcon\Config(array(
     'db' => array(
-        'host'      => 'pgsql',
+        'host'      => 'api2cms-pgsql',
         'username'  => 'api2cms',
         'password'  => 'temp123',
         'dbname'    => 'api2cms',

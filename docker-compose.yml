@@ -1,39 +1,37 @@
 version: '2'
 
 services:
-  src:
+  api2cms-src:
+    container_name: api2cms-src
     image: busybox
     volumes:
         - ./:/usr/share/nginx/html/
-  nginx:
+  api2cms-nginx:
     image: nginx:stable
     container_name: api2cms-nginx
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./images/nginx/default.conf:/etc/nginx/conf.d/default.conf
     volumes_from:
-      - src
+      - api2cms-src
     depends_on:
-      - "src"
-      - "php-fpm"
+      - "api2cms-src"
+      - "api2cms-php-fpm"
 
-  php-fpm:
+  api2cms-php-fpm:
     build:
       context: ./images/php-fpm
-    container_name: api2cms-fpm
+    container_name: api2cms-php-fpm
     ports:
       - "9000:9000"
       - "9001:9001"
     volumes_from:
-      - src
+      - api2cms-src
     depends_on:
-      - "src"
-    environment:
-      XDEBUG_CONFIG: "remote_host=192.168.50.4"
-      PHP_IDE_CONFIG: "serverName=api2cms.dev"
+      - "api2cms-src"
 
-  pgsql:
+  api2cms-pgsql:
     image: postgres:latest
     container_name: api2cms-pgsql
     volumes:
