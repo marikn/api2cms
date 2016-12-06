@@ -7,7 +7,7 @@ services:
     volumes:
         - ./:/usr/share/nginx/html/
   api2cms-nginx:
-    image: nginx:stable
+    image: nginx:latest
     container_name: api2cms-nginx
     ports:
       - "8080:80"
